@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AMButton" parent="Base.Widget.AppCompat.Button">
+        <item name="android:textColor">@color/orange</item>
+        <item name="android:background">@drawable/button</item>
+    </style>
+
+
+    <style name="ConfirmButton" parent="AMButton">
+        <item name="android:background">@drawable/button_confirm</item>
+
+    </style>
+
+    <style name="CancelButton" parent="AMButton">
+        <item name="android:background">@drawable/button_cancel</item>
+    </style>
+</resources>

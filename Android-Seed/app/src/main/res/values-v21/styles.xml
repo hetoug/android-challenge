@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+        <style name="AM2Theme" parent="Theme.AppCompat.Light.DarkActionBar">
+                <item name="colorPrimary">@color/colorPrimary2</item>
+                <item name="colorPrimaryDark">@color/colorPrimaryDark2</item>
+                <item name="colorAccent">@color/colorAccent2</item>
+                <item name="buttonStyle">@style/Base.Widget.AppCompat.Button</item>
+                <item name="android:navigationBarColor">@color/darkorange</item>
+        </style>
+</resources>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AMTextView">
+        <item name="fontPath">@string/miso_bold</item>
+    </style>
+
+
+    <style name="Title" parent="AMTextView">
+        <item name="fontPath">@string/miso_bold</item>
+        <item name="android:textColor">@color/red</item>
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <style name="Text" parent="AMTextView">
+        <item name="fontPath">@string/sanfran_regular</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/grey</item>
+    </style>
+
+</resources>

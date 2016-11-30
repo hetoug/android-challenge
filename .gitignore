@@ -1,0 +1,30 @@
+.DS_Store
+.gradle
+gradle/
+gradlew
+gradlew.bat
+/local.properties
+.idea/
+.DS_Store
+/build
+*.dex
+
+# Java class files
+*.class
+
+# Generated files
+bin/
+gen/
+
+
+# Log Files
+*.log
+
+# Android Studio Navigation editor temp files
+.navigation/
+
+# Android Studio captures folder
+captures/
+
+*.iml
+*.apk

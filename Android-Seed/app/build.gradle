@@ -1,0 +1,99 @@
+apply plugin: 'com.android.application'
+
+ext {
+    supportLibVersion = '25.0.1'
+    playLibVersion = '9.8.0'
+}
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.0"
+
+    def versionPropsFile = file('version.properties')
+
+    if (versionPropsFile.canRead()) {
+        def Properties versionProps = new Properties()
+
+        versionProps.load(new FileInputStream(versionPropsFile))
+
+        def code = versionProps['VERSION_CODE'].toInteger() + 1
+
+        versionProps['VERSION_CODE']=code.toString()
+        versionProps.store(versionPropsFile.newWriter(), null)
+
+        defaultConfig {
+            applicationId "dk.adaptmobile.android_seed"
+            minSdkVersion 16
+            targetSdkVersion 25
+            versionCode code
+            versionName "1.0"
+            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        }
+    }
+    else {
+        throw new GradleException("Could not read version.properties!")
+    }
+
+
+
+    signingConfigs {
+        debug { //SHA1 15:56:88:D5:D2:A0:4D:7D:0C:5A:14:F8:4E:52:32:08:80:02:3B:40
+            storeFile file('../../launch/amDebug.keystore')
+            storePassword "adaptDebug"
+            keyAlias "adaptDebug"
+            keyPassword "adaptDebug"
+        }
+        beta {
+            storeFile file('../../launch/CHANGE.keystore')
+            storePassword "CHANGE"
+            keyAlias "CHANGE"
+            keyPassword "CHANGE"
+        }
+        release {
+            storeFile file("../../launch/CHANGE.keystore")
+            storePassword "CHANGE"
+            keyAlias "CHANGE"
+            keyPassword "CHANGE"
+        }
+    }
+
+    productFlavors {
+        dev {
+            minSdkVersion 21
+        }
+        prod {
+            minSdkVersion 16
+        }
+    }
+    buildTypes {
+        debug {
+            minifyEnabled false
+            applicationIdSuffix ".debug"
+            resValue "string", "app_name", "AMSeed Dev"
+            debuggable true
+        }
+        beta {
+            minifyEnabled false
+            applicationIdSuffix ".beta"
+            resValue "string", "app_name", "AMSeed Beta"
+            debuggable true
+            signingConfig signingConfigs.beta
+        }
+        release {
+            minifyEnabled false
+            resValue "string", "app_name", "AMSeed"
+            signingConfig signingConfigs.release
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile "com.android.support:appcompat-v7:${supportLibVersion}"
+    compile "com.google.android.gms:play-services-base:${playLibVersion}"
+    compile 'uk.co.chrisjenx:calligraphy:2.2.0'
+    testCompile 'junit:junit:4.12'
+}
