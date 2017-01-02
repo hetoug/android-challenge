@@ -94,6 +94,7 @@ dependencies {
     })
     compile "com.android.support:appcompat-v7:${supportLibVersion}"
     compile "com.google.android.gms:play-services-base:${playLibVersion}"
+    compile 'com.github.adaptmobile-organization:amutil:1.0.0'
     compile 'uk.co.chrisjenx:calligraphy:2.2.0'
     testCompile 'junit:junit:4.12'
 }

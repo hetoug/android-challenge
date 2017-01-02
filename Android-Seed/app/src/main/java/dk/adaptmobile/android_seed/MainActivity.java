@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import dk.adaptmobile.amutil.misc.AMUtil;
+
 public class MainActivity extends AppCompatActivity {
 
     private static int theme = R.style.AMTheme;
@@ -14,6 +16,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setTheme(theme);
         setContentView(R.layout.activity_main);
+
+        AMUtil.isFirstLaunch(this);
 
         Button buttonSwitch = (Button)findViewById(R.id.buttonSwitch);
         buttonSwitch.setOnClickListener(new View.OnClickListener() {
