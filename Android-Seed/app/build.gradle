@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 ext {
-    supportLibVersion = '25.0.1'
-    playLibVersion = '9.8.0'
+    supportLibVersion = '25.1.0'
+    playLibVersion = '10.0.1'
 }
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.0"
+    buildToolsVersion "25.0.2"
 
     def versionPropsFile = file('version.properties')
 
@@ -43,7 +43,7 @@ android {
             keyAlias "adaptDebug"
             keyPassword "adaptDebug"
         }
-        beta {
+        stage {
             storeFile file('../../launch/CHANGE.keystore')
             storePassword "CHANGE"
             keyAlias "CHANGE"
@@ -72,12 +72,12 @@ android {
             resValue "string", "app_name", "AMSeed Dev"
             debuggable true
         }
-        beta {
+        stage {
             minifyEnabled false
             applicationIdSuffix ".beta"
             resValue "string", "app_name", "AMSeed Beta"
             debuggable true
-            signingConfig signingConfigs.beta
+            signingConfig signingConfigs.stage
         }
         release {
             minifyEnabled false
@@ -94,7 +94,11 @@ dependencies {
     })
     compile "com.android.support:appcompat-v7:${supportLibVersion}"
     compile "com.google.android.gms:play-services-base:${playLibVersion}"
+
     compile 'com.github.adaptmobile-organization:amutil:1.0.0'
+    compile 'com.greysonparrelli.permiso:permiso:0.3.0'
     compile 'uk.co.chrisjenx:calligraphy:2.2.0'
+    compile 'com.jakewharton:butterknife:8.4.0'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
     testCompile 'junit:junit:4.12'
 }
