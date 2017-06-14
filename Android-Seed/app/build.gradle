@@ -1,40 +1,29 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 
 ext {
-    supportLibVersion = '25.1.0'
+    supportLibVersion = '25.4.0'
     playLibVersion = '10.0.1'
+    butterknifeVersion = '8.6.0'
+    conductorVersion = '2.1.3'
+    firebaseVersion = '11.0.0'
 }
-
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    buildToolsVersion "26.0.0"
 
-    def versionPropsFile = file('version.properties')
-
-    if (versionPropsFile.canRead()) {
-        def Properties versionProps = new Properties()
-
-        versionProps.load(new FileInputStream(versionPropsFile))
-
-        def code = versionProps['VERSION_CODE'].toInteger() + 1
-
-        versionProps['VERSION_CODE']=code.toString()
-        versionProps.store(versionPropsFile.newWriter(), null)
-
-        defaultConfig {
-            applicationId "dk.adaptmobile.android_seed"
-            minSdkVersion 16
-            targetSdkVersion 25
-            versionCode code
-            versionName "1.0"
-            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        }
+    defaultConfig {
+        applicationId "dk.adaptmobile.android_seed"
+        minSdkVersion 19
+        targetSdkVersion 25
+        versionCode 1
+        versionName "1.0.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
+        multiDexEnabled true
     }
-    else {
-        throw new GradleException("Could not read version.properties!")
-    }
-
-
 
     signingConfigs {
         debug { //SHA1 15:56:88:D5:D2:A0:4D:7D:0C:5A:14:F8:4E:52:32:08:80:02:3B:40
@@ -44,10 +33,10 @@ android {
             keyPassword "adaptDebug"
         }
         stage {
-            storeFile file('../../launch/CHANGE.keystore')
-            storePassword "CHANGE"
-            keyAlias "CHANGE"
-            keyPassword "CHANGE"
+            storeFile file('../../launch/amDebug.keystore')
+            storePassword "adaptDebug"
+            keyAlias "adaptDebug"
+            keyPassword "adaptDebug"
         }
         release {
             storeFile file("../../launch/CHANGE.keystore")
@@ -62,26 +51,26 @@ android {
             minSdkVersion 21
         }
         prod {
-            minSdkVersion 16
+            minSdkVersion 19
         }
     }
     buildTypes {
         debug {
             minifyEnabled false
             applicationIdSuffix ".debug"
-            resValue "string", "app_name", "AMSeed Dev"
+            resValue "string", "app_name", "CHANGE Dev"
             debuggable true
         }
         stage {
             minifyEnabled false
             applicationIdSuffix ".beta"
-            resValue "string", "app_name", "AMSeed Beta"
+            resValue "string", "app_name", "CHANGE Beta"
             debuggable true
             signingConfig signingConfigs.stage
         }
         release {
             minifyEnabled false
-            resValue "string", "app_name", "AMSeed"
+            resValue "string", "app_name", "CHANGE"
             signingConfig signingConfigs.release
         }
     }
@@ -89,31 +78,55 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+
+    //ANDROID SUPPORT
+//    compile "com.android.support:support-v4:${supportLibVersion}"
+    compile 'com.android.support:multidex:1.0.1'
     compile "com.android.support:appcompat-v7:${supportLibVersion}"
-    compile "com.google.android.gms:play-services-base:${playLibVersion}"
-    compile 'com.github.adaptmobile-organization:amutil:1.1.8'
+    compile "com.android.support:recyclerview-v7:${supportLibVersion}"
+    compile "com.android.support:design:${supportLibVersion}"
+    compile "com.android.support:support-vector-drawable:${supportLibVersion}"
+
+
+    //KOTLIN
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+
+    //CONDUCTOR
+    compile "com.bluelinelabs:conductor:$conductorVersion"
+    compile "com.bluelinelabs:conductor-support:$conductorVersion"
+
+    //UTIL
+    compile 'com.github.adaptmobile-organization:amutil:1.2.1'
+    compile 'com.github.adaptmobile-organization:amkotlinutil:1.0.1'
     compile 'com.greysonparrelli.permiso:permiso:0.3.0'
+    compile "com.jakewharton:butterknife:$butterknifeVersion"
+    annotationProcessor "com.jakewharton:butterknife-compiler:$butterknifeVersion"
+    kapt "com.jakewharton:butterknife-compiler:$butterknifeVersion"
+//    compile 'org.parceler:parceler-api:1.1.8'
+//    kapt 'org.parceler:parceler:1.1.8'
+
+    //UI
     compile 'uk.co.chrisjenx:calligraphy:2.2.0'
-    compile 'com.jakewharton:butterknife:8.4.0'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
+    compile 'com.pnikosis:materialish-progress:1.7'
+//    compile 'jp.wasabeef:recyclerview-animators:2.2.6'
+//    compile 'com.androidadvance:topsnackbar:1.1.1'
+//    compile 'com.github.bjarkeseverinsen:sweet-alert-dialog:1.3'
 
-    debugCompile 'com.github.adaptmobile-organization:amtestutil:1.0.3'
-    testCompile 'junit:junit:4.12'
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    androidTestCompile ('com.android.support.test.espresso:espresso-contrib:2.2.2'){
-        exclude group: 'com.android.support', module: 'appcompat-v7'
-        exclude group: 'com.android.support', module: 'support-v4'
-        exclude group: 'com.android.support', module: 'design'
-        exclude module: 'recyclerview-v7'
-    }
-    androidTestCompile ('com.android.support.test.espresso:espresso-web:2.2.2') {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    }
-    androidTestCompile "com.android.support:support-annotations:${supportLibVersion}"
-    androidTestCompile 'com.android.support.test:runner:0.5'
-    androidTestCompile 'com.android.support.test:rules:0.4'
+    //FIREBASE
+//    compile "com.google.firebase:firebase-core:$firebaseVersion"
+//    compile "com.google.firebase:firebase-auth:$firebaseVersion"
+//    compile "com.google.firebase:firebase-database:$firebaseVersion"
+//    compile "com.google.firebase:firebase-storage:$firebaseVersion"
+//    compile "com.google.firebase:firebase-messaging:$firebaseVersion"
 
-    androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.1'
+    //TESTING
+//    testCompile 'com.github.adaptmobile-organization:amtestutil:1.0.3'
+//    testCompile 'junit:junit:4.12'
+//    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', { exclude group: 'com.android.support', module: 'support-annotations' })
+//    androidTestCompile('com.android.support.test.espresso:espresso-contrib:2.2.2') { exclude group: 'com.android.support', module: 'appcompat-v7' exclude group: 'com.android.support', module: 'support-v4' exclude group: 'com.android.support', module: 'design' exclude module: 'recyclerview-v7' }
+//    androidTestCompile('com.android.support.test.espresso:espresso-web:2.2.2') { exclude group: 'com.android.support', module: 'support-annotations' }
+//    androidTestCompile "com.android.support:support-annotations:${supportLibVersion}"
+//    androidTestCompile 'com.android.support.test:runner:0.5'
+//    androidTestCompile 'com.android.support.test:rules:0.4'
+//    androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.1'
 }
