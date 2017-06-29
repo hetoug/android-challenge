@@ -25,6 +25,8 @@ android {
         multiDexEnabled true
     }
 
+
+
     signingConfigs {
         debug { //SHA1 15:56:88:D5:D2:A0:4D:7D:0C:5A:14:F8:4E:52:32:08:80:02:3B:40
             storeFile file('../../launch/amDebug.keystore')
@@ -48,18 +50,25 @@ android {
 
     productFlavors {
         dev {
-            minSdkVersion 21
+//            minSdkVersion 21 // NOT NEEDED
+            ext.alwaysUpdateBuildId = false // Disable crashlytics build ID on debug
+            resConfigs("en", "xxhdpi")
+            aaptOptions.cruncherEnabled = false //Disable PNG crunching or use WebP
+            splits.abi.enable = false //Disable ABI splits
+            splits.density.enable = false //disable dev splits
         }
-        prod {
-            minSdkVersion 19
-        }
+//        prod {
+//            minSdkVersion 19 // NOT NEEDED
+//        }
     }
+
     buildTypes {
         debug {
             minifyEnabled false
             applicationIdSuffix ".debug"
             resValue "string", "app_name", "CHANGE Dev"
             debuggable true
+
         }
         stage {
             minifyEnabled false
@@ -86,7 +95,6 @@ dependencies {
     compile "com.android.support:recyclerview-v7:${supportLibVersion}"
     compile "com.android.support:design:${supportLibVersion}"
     compile "com.android.support:support-vector-drawable:${supportLibVersion}"
-
 
     //KOTLIN
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
