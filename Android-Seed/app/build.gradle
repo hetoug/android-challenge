@@ -50,16 +50,12 @@ android {
 
     productFlavors {
         dev {
-//            minSdkVersion 21 // NOT NEEDED
             ext.alwaysUpdateBuildId = false // Disable crashlytics build ID on debug
             resConfigs("en", "xxhdpi")
             aaptOptions.cruncherEnabled = false //Disable PNG crunching or use WebP
             splits.abi.enable = false //Disable ABI splits
-            splits.density.enable = false //disable dev splits
+            splits.density.enable = false //disable density splits
         }
-//        prod {
-//            minSdkVersion 19 // NOT NEEDED
-//        }
     }
 
     buildTypes {
