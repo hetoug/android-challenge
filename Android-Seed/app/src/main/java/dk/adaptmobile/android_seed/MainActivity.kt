@@ -9,6 +9,8 @@ import com.bluelinelabs.conductor.Router
 import dk.adaptmobile.amutil.misc.AMUtil
 import kotlinx.android.synthetic.main.activity_main.*
 
+
+
 class MainActivity : AppCompatActivity() {
 
     private lateinit var router: Router
