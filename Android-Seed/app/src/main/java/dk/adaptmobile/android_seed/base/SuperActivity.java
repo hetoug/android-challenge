@@ -1,4 +1,4 @@
-package dk.adaptmobile.android_seed;
+package dk.adaptmobile.android_seed.base;
 
 import android.content.Context;
 import android.os.Bundle;
