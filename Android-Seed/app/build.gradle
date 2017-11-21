@@ -48,25 +48,28 @@ android {
 
     flavorDimensions "default"
 
-    productFlavors {
-        dev {
-            ext.alwaysUpdateBuildId = false // Disable crashlytics build ID on debug
-            resConfigs("en", "xxhdpi")
-            aaptOptions.cruncherEnabled = false //Disable PNG crunching or use WebP
-            splits.abi.enable = false //Disable ABI splits
-            splits.density.enable = false //disable density splits
+    //Performance optimizations
+    applicationVariants.all { variant ->
+        if (variant.buildType.name.equals("debug")) {
+            variant.mergedFlavor.resourceConfigurations.add("en")
+            variant.mergedFlavor.resourceConfigurations.add("xxhdpi")
         }
     }
 
     buildTypes {
         debug {
+            //Performance optimizations
+            ext.alwaysUpdateBuildId = false // Disable crashlytics build ID on debug
+            aaptOptions.cruncherEnabled = false //Disable PNG crunching or use WebP, defaults to false in debug for Android plugin 3.0
+            splits.abi.enable = false //Disable ABI splits
+            splits.density.enable = false //disable density splits
+
             minifyEnabled false
             applicationIdSuffix ".debug"
             resValue "string", "app_name", "CHANGE Dev"
             buildConfigField "int", "HTTP_LOGLEVEL", "2"
             buildConfigField "String", "BASE_URL", "\"\""
             debuggable true
-
         }
         stage {
             minifyEnabled false
@@ -125,7 +128,6 @@ dependencies {
     annotationProcessor "com.jakewharton:butterknife-compiler:$butterknifeVersion"
     kapt "com.jakewharton:butterknife-compiler:$butterknifeVersion"
 
-
     // --- PERFORMANCE --- //
     implementation('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') { transitive = true }
     debugImplementation "com.squareup.leakcanary:leakcanary-android:$leakcanaryVersion"
@@ -149,9 +151,15 @@ dependencies {
     // --- TESTING --- //
 //    testImplementation 'com.github.adaptmobile-organization:amtestutil:1.0.23'
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', { exclude group: 'com.android.support', module: 'support-annotations' })
-    androidTestImplementation('com.android.support.test.espresso:espresso-contrib:2.2.2') { exclude group: 'com.android.support', module: 'appcompat-v7' exclude group: 'com.android.support', module: 'support-v4' exclude group: 'com.android.support', module: 'design' exclude module: 'recyclerview-v7' }
-    androidTestImplementation('com.android.support.test.espresso:espresso-web:2.2.2') { exclude group: 'com.android.support', module: 'support-annotations' }
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    androidTestImplementation('com.android.support.test.espresso:espresso-contrib:2.2.2') {
+        exclude group: 'com.android.support', module: 'appcompat-v7' exclude group: 'com.android.support', module: 'support-v4' exclude group: 'com.android.support', module: 'design' exclude module: 'recyclerview-v7'
+    }
+    androidTestImplementation('com.android.support.test.espresso:espresso-web:2.2.2') {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
     androidTestImplementation "com.android.support:support-annotations:${supportLibVersion}"
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test:rules:1.0.1'
