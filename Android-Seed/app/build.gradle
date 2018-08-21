@@ -135,7 +135,6 @@ dependencies {
     releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakcanaryVersion"
 
     // --- UI --- //
-    implementation 'uk.co.chrisjenx:calligraphy:2.3.0'
     implementation 'com.pnikosis:materialish-progress:1.7'
     implementation 'jp.wasabeef:recyclerview-animators:2.2.7'
     implementation 'com.androidadvance:topsnackbar:1.1.1'

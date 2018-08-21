@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         ButterKnife.bind(this)
 
-        AMUtil.isFirstLaunch(this)
+
 
         router = Conductor.attachRouter(this, container, savedInstanceState)
 
