@@ -1,18 +1,18 @@
 package dk.adaptmobile.android_seed.base;
 
-import android.content.Context;
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 
 import com.greysonparrelli.permiso.Permiso;
 
-import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 /**
  * Created by Thomas on 06/01/2017.
  */
 
+@SuppressLint("Registered")
 public class SuperActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,11 +32,4 @@ public class SuperActivity extends AppCompatActivity {
         Permiso.getInstance().onRequestPermissionResult(requestCode, permissions, grantResults);
     }
 
-    @Override
-    protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
-    }
-
-    public void closeActivity() {
-    }
 }
