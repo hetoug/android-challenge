@@ -1,0 +1,114 @@
+version: 2
+jobs:
+  build:
+    working_directory: /opt/workspace
+    docker:
+      - image: adaptmobile/android-docker:27
+    environment:
+      JVM_OPTS: -Xmx3200m
+    steps:
+      - checkout
+#      - restore_cache:
+#          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+      - run:
+          name: Download Dependencies
+          command: cd $(/opt/tools/findGradleW.sh) && ./gradlew androidDependencies
+
+      - persist_to_workspace:
+          # Must be an absolute path, or relative path from working_directory
+          root: /opt
+          # Must be relative path from root
+          paths:
+            - workspace
+#      - save_cache:
+#          paths:
+#            - ~/.gradle
+#          key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
+  deploy-develop:
+    working_directory: /opt/workspace
+    docker:
+      - image: adaptmobile/android-docker:27
+    steps:
+      - attach_workspace:
+          # Must be absolute path or relative path from working_directory
+          at: /opt
+      - run:
+          name: Generating Beta Icon
+          command: /opt/icon-generation/generate-beta-icon.sh
+      - run:
+          name: Build Debug APK
+          command: cd $(/opt/tools/findGradleW.sh) && ./gradlew assembleProdDebug
+      - run:
+          name: Upload Debug APK
+          command: cd $(/opt/tools/findGradleW.sh) && nodejs /opt/uploader/uploader.js prodDebug
+          environment:
+            TB_TOKEN: 2YPAqaWwcYmd62AbbcH3sf5w
+
+
+  deploy-stage:
+    working_directory: /opt/workspace
+    docker:
+      - image: adaptmobile/android-docker:27
+    steps:
+      - attach_workspace:
+          # Must be absolute path or relative path from working_directory
+          at: /opt
+      - run:
+          name: Generating Beta Icon
+          command: /opt/icon-generation/generate-beta-icon.sh
+      - run:
+          name: Build Staging APK
+          command: cd $(/opt/tools/findGradleW.sh) && ./gradlew assembleProdStage
+      - run:
+          name: Upload Staging APK
+          command: cd $(/opt/tools/findGradleW.sh) && nodejs /opt/uploader/uploader.js prodStage
+          environment:
+            TB_TOKEN: 2YPAqaWwcYmd62AbbcH3sf5w
+
+  deploy-prod:
+    working_directory: /opt/workspace
+    docker:
+      - image: adaptmobile/android-docker:27
+    steps:
+      - attach_workspace:
+          # Must be absolute path or relative path from working_directory
+          at: /opt
+      - run:
+          name: Build Release APK
+          command: cd $(/opt/tools/findGradleW.sh) && ./gradlew assembleProdRelease
+      - run:
+          name: Upload Release APK
+          command: cd $(/opt/tools/findGradleW.sh) && nodejs /opt/uploader/uploader.js prodRelease
+          environment:
+            TB_TOKEN: 2YPAqaWwcYmd62AbbcH3sf5w
+
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - build
+      - deploy-develop:
+          requires:
+            - build
+          filters:
+            branches:
+              ignore:
+                - stage
+                - master
+                - /release.*/
+      - deploy-stage:
+          requires:
+            - build
+          filters:
+            branches:
+              only: 
+                - stage
+                - /hotfix.*/
+      - deploy-prod:
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - master
+                - /release.*/

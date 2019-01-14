@@ -7,6 +7,6 @@ class MainActivityViewModel {
     val firstView: BehaviorSubject<Routing> = BehaviorSubject.create()
 
     init {
-        firstView.onNext(Routing.Test)
+        firstView.onNext(Routing.Start)
     }
 }

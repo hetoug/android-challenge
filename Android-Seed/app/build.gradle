@@ -53,6 +53,15 @@ android {
 
     flavorDimensions "default"
 
+    productFlavors {
+        dev {
+            versionCode 1
+        }
+        prod {
+            versionCode getReleaseVersionCode()
+        }
+    }
+
     //Performance optimizations
     applicationVariants.all { variant ->
         if (variant.buildType.name == "debug") {
@@ -140,6 +149,7 @@ dependencies {
     releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakcanaryVersion"
     // --- UI --- //
     implementation 'com.pnikosis:materialish-progress:1.7'
+    implementation 'com.github.bumptech.glide:glide:4.8.0'
     implementation 'jp.wasabeef:recyclerview-animators:2.3.0'
     // --- FIREBASE --- //
     implementation 'com.google.firebase:firebase-core:16.0.4'
@@ -149,3 +159,10 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging:17.3.4'
 
 }
+
+def getReleaseVersionCode() {
+    def version = 0 + (System.getenv("CIRCLE_BUILD_NUM") ?: 1).toInteger()
+    println sprintf("Setting version code: %d", version)
+    return version
+}
+

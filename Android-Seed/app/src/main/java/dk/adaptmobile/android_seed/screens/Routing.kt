@@ -2,7 +2,7 @@ package dk.adaptmobile.android_seed.screens
 
 import com.bluelinelabs.conductor.Controller
 import dk.adaptmobile.amkotlinutil.extensions.AnimationType
-import dk.adaptmobile.android_seed.screens.test.TestView
+import dk.adaptmobile.android_seed.screens.start.StartView
 
 sealed class Routing(
         val controller: Controller? = null,
@@ -14,6 +14,6 @@ sealed class Routing(
         open val tag: String? = null,
         val hidekeyboard: Boolean = true
 ) {
-    object Test : Routing(TestView())
+    object Start : Routing(StartView())
     data class External(val link: Int) : Routing()
 }
