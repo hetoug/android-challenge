@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: /opt/workspace
     docker:
-      - image: adaptmobile/android-docker:27
+      - image: adaptmobile/android-docker:28
     environment:
       JVM_OPTS: -Xmx3200m
     steps:
@@ -27,7 +27,7 @@ jobs:
   deploy-develop:
     working_directory: /opt/workspace
     docker:
-      - image: adaptmobile/android-docker:27
+      - image: adaptmobile/android-docker:28
     steps:
       - attach_workspace:
           # Must be absolute path or relative path from working_directory
@@ -48,7 +48,7 @@ jobs:
   deploy-stage:
     working_directory: /opt/workspace
     docker:
-      - image: adaptmobile/android-docker:27
+      - image: adaptmobile/android-docker:28
     steps:
       - attach_workspace:
           # Must be absolute path or relative path from working_directory
@@ -68,7 +68,7 @@ jobs:
   deploy-prod:
     working_directory: /opt/workspace
     docker:
-      - image: adaptmobile/android-docker:27
+      - image: adaptmobile/android-docker:28
     steps:
       - attach_workspace:
           # Must be absolute path or relative path from working_directory
