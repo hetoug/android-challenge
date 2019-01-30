@@ -3,7 +3,6 @@ package dk.adaptmobile.android_seed.network
 import android.annotation.SuppressLint
 import com.google.gson.GsonBuilder
 import dk.adaptmobile.android_seed.BuildConfig
-import io.reactivex.schedulers.Schedulers
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -36,7 +35,7 @@ object ConnectionManager {
         retrofit = Retrofit.Builder()
                 .baseUrl(BuildConfig.BASE_URL)
                 .client(client)
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io()))
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.createAsync())
                 .addConverterFactory(GsonConverterFactory.create(gson)) // had to switch back to gson due to moshi bug slowing down the first request https://github.com/square/moshi/issues/362
                 .build()
 
