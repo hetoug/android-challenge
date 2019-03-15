@@ -57,6 +57,13 @@ abstract class BaseView<T : BaseViewModel> : RxController(), LayoutContainer {
                             .subscribe {
                                 //TODO: Handle error
                             }
+
+                    viewModel.output
+                            .compose(bindUntilEvent(ControllerEvent.DESTROY))
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe {
+                                handleEvent(it)
+                            }
                 }
             }
         }
@@ -83,6 +90,8 @@ abstract class BaseView<T : BaseViewModel> : RxController(), LayoutContainer {
     protected abstract fun setViewModel(): T
 
     protected abstract fun inflateView(): Int
+
+    protected abstract fun handleEvent(output: BaseViewModel.IOutput)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup): View = container.inflate(inflateView(), false)
 
