@@ -1,40 +1,30 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'io.fabric'
 
 ext {
-    supportLibVersion = '25.1.0'
-    playLibVersion = '10.0.1'
+    conductorVersion = '2.1.5'
+    leakcanaryVersion = '1.6.2'
+}
+
+androidExtensions {
+    experimental = true
 }
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion 28
 
-    def versionPropsFile = file('version.properties')
-
-    if (versionPropsFile.canRead()) {
-        def Properties versionProps = new Properties()
-
-        versionProps.load(new FileInputStream(versionPropsFile))
-
-        def code = versionProps['VERSION_CODE'].toInteger() + 1
-
-        versionProps['VERSION_CODE']=code.toString()
-        versionProps.store(versionPropsFile.newWriter(), null)
-
-        defaultConfig {
-            applicationId "dk.adaptmobile.android_seed"
-            minSdkVersion 16
-            targetSdkVersion 25
-            versionCode code
-            versionName "1.0"
-            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        }
+    defaultConfig {
+        applicationId "dk.adaptmobile.android_seed"
+        minSdkVersion 21
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0.0"
+        vectorDrawables.useSupportLibrary = true
+        multiDexEnabled true
     }
-    else {
-        throw new GradleException("Could not read version.properties!")
-    }
-
-
 
     signingConfigs {
         debug { //SHA1 15:56:88:D5:D2:A0:4D:7D:0C:5A:14:F8:4E:52:32:08:80:02:3B:40
@@ -44,10 +34,10 @@ android {
             keyPassword "adaptDebug"
         }
         stage {
-            storeFile file('../../launch/CHANGE.keystore')
-            storePassword "CHANGE"
-            keyAlias "CHANGE"
-            keyPassword "CHANGE"
+            storeFile file('../../launch/amDebug.keystore')
+            storePassword "adaptDebug"
+            keyAlias "adaptDebug"
+            keyPassword "adaptDebug"
         }
         release {
             storeFile file("../../launch/CHANGE.keystore")
@@ -57,63 +47,118 @@ android {
         }
     }
 
+    flavorDimensions "default"
+
     productFlavors {
         dev {
-            minSdkVersion 21
+            versionCode 1
         }
         prod {
-            minSdkVersion 16
+            versionCode getReleaseVersionCode()
         }
     }
+
+    //Performance optimizations
+    applicationVariants.all { variant ->
+        if (variant.buildType.name == "debug") {
+            variant.mergedFlavor.resourceConfigurations.add("en")
+            variant.mergedFlavor.resourceConfigurations.add("xxhdpi")
+        }
+    }
+
     buildTypes {
         debug {
+            //Performance optimizations
+            ext.alwaysUpdateBuildId = false // Disable crashlytics build ID on debug
+            aaptOptions.cruncherEnabled = false //Disable PNG crunching or use WebP, defaults to false in debug for Android plugin 3.0
+            splits.abi.enable = false //Disable ABI splits
+            splits.density.enable = false //disable density splits
+
             minifyEnabled false
             applicationIdSuffix ".debug"
-            resValue "string", "app_name", "AMSeed Dev"
+            resValue "string", "app_name", "CHANGE Dev"
+            buildConfigField "int", "HTTP_LOGLEVEL", "2"
+            buildConfigField "String", "BASE_URL", "\"\""
             debuggable true
         }
         stage {
             minifyEnabled false
-            applicationIdSuffix ".beta"
-            resValue "string", "app_name", "AMSeed Beta"
+            applicationIdSuffix ".stage"
+            resValue "string", "app_name", "CHANGE Stage"
+            buildConfigField "int", "HTTP_LOGLEVEL", "2"
+            buildConfigField "String", "BASE_URL", "\"\""
             debuggable true
             signingConfig signingConfigs.stage
         }
         release {
             minifyEnabled false
-            resValue "string", "app_name", "AMSeed"
+            resValue "string", "app_name", "CHANGE"
+            buildConfigField "int", "HTTP_LOGLEVEL", "0"
+            buildConfigField "String", "BASE_URL", "\"\""
             signingConfig signingConfigs.release
         }
     }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile "com.android.support:appcompat-v7:${supportLibVersion}"
-    compile "com.google.android.gms:play-services-base:${playLibVersion}"
-    compile 'com.github.adaptmobile-organization:amutil:1.1.8'
-    compile 'com.greysonparrelli.permiso:permiso:0.3.0'
-    compile 'uk.co.chrisjenx:calligraphy:2.2.0'
-    compile 'com.jakewharton:butterknife:8.4.0'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    // --- ANDROID --- //
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation 'androidx.multidex:multidex:2.0.1'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'androidx.vectordrawable:vectordrawable:1.0.1'
+    implementation 'androidx.appcompat:appcompat:1.0.2'
+    implementation 'androidx.legacy:legacy-support-core-utils:1.0.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    
+    //KOTLIN
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'com.github.ajalt:timberkt:1.5.1'
+    //CONDUCTOR
+    implementation "com.bluelinelabs:conductor:$conductorVersion"
+    implementation "com.bluelinelabs:conductor-support:$conductorVersion"
+    implementation "com.bluelinelabs:conductor-rxlifecycle2:$conductorVersion"
+    // --- NETWORK --- //
+    implementation 'com.squareup.retrofit2:retrofit:2.5.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.5.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.5.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:3.12.0'
+    // --- RX --- //
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.4'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.0'
+    implementation 'io.reactivex.rxjava2:rxkotlin:2.3.0'
+    implementation 'com.jakewharton.rxbinding2:rxbinding:2.1.1'
+    implementation 'com.jakewharton.rxbinding2:rxbinding-kotlin:2.1.1'
+    implementation 'com.jakewharton.rxbinding2:rxbinding-appcompat-v7:2.1.1'
+    implementation 'com.jakewharton.rxbinding2:rxbinding-appcompat-v7-kotlin:2.1.1'
+    implementation 'com.jakewharton.rxbinding2:rxbinding-recyclerview-v7:2.1.1'
+    implementation 'com.jakewharton.rxbinding2:rxbinding-recyclerview-v7-kotlin:2.1.1'
+    // --- UTIL --- //
+    implementation 'com.github.adaptmobile-organization:amkotlinutil:6.0.7'
+    implementation 'com.greysonparrelli.permiso:permiso:0.3.0'
+    implementation 'com.github.hotchemi:khronos:0.9.0'
+    // --- PERFORMANCE --- //
+    implementation "com.crashlytics.sdk.android:crashlytics:2.9.9"
+    debugImplementation "com.squareup.leakcanary:leakcanary-android:$leakcanaryVersion"
+    stageImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakcanaryVersion"
+    releaseImplementation "com.squareup.leakcanary:leakcanary-android-no-op:$leakcanaryVersion"
+    // --- UI --- //
+    implementation 'com.pnikosis:materialish-progress:1.7'
+    implementation 'com.github.bumptech.glide:glide:4.8.0'
+    implementation 'jp.wasabeef:recyclerview-animators:3.0.0'
+    // --- FIREBASE --- //
+    implementation 'com.google.firebase:firebase-core:16.0.7'
+    implementation 'com.google.firebase:firebase-auth:16.2.0'
+    implementation 'com.google.firebase:firebase-database:16.1.0'
+    implementation 'com.google.firebase:firebase-storage:16.1.0'
+    implementation 'com.google.firebase:firebase-messaging:17.4.0'
 
-    debugCompile 'com.github.adaptmobile-organization:amtestutil:1.0.3'
-    testCompile 'junit:junit:4.12'
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    androidTestCompile ('com.android.support.test.espresso:espresso-contrib:2.2.2'){
-        exclude group: 'com.android.support', module: 'appcompat-v7'
-        exclude group: 'com.android.support', module: 'support-v4'
-        exclude group: 'com.android.support', module: 'design'
-        exclude module: 'recyclerview-v7'
-    }
-    androidTestCompile ('com.android.support.test.espresso:espresso-web:2.2.2') {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    }
-    androidTestCompile "com.android.support:support-annotations:${supportLibVersion}"
-    androidTestCompile 'com.android.support.test:runner:0.5'
-    androidTestCompile 'com.android.support.test:rules:0.4'
-
-    androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.1'
 }
+
+def getReleaseVersionCode() {
+    def version = 0 + (System.getenv("CIRCLE_BUILD_NUM") ?: 1).toInteger()
+    println sprintf("Setting version code: %d", version)
+    return version
+}
+
