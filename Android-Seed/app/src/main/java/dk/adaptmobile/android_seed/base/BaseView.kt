@@ -17,7 +17,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.*
 
-
 /**
  * Created by Alex on 5/7/18
  */
@@ -55,7 +54,7 @@ abstract class BaseView<T : BaseViewModel> : RxController(), LayoutContainer {
                             .compose(bindUntilEvent(ControllerEvent.DESTROY))
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe {
-                                //TODO: Handle error
+                                // TODO: Handle error
                             }
 
                     viewModel.output
@@ -103,7 +102,4 @@ abstract class BaseView<T : BaseViewModel> : RxController(), LayoutContainer {
         super.onDestroyView(view)
         clearFindViewByIdCache()
     }
-
-
 }
-

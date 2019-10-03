@@ -1,4 +1,4 @@
-package dk.adaptmobile.android_seed;
+package dk.adaptmobile.android_seed
 
 import android.content.Intent
 import android.os.Bundle
@@ -14,5 +14,4 @@ class SplashActivity : SuperActivity() {
         finish()
         overridePendingTransition(0, 0)
     }
-
 }

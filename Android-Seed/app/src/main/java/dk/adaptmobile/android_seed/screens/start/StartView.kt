@@ -27,5 +27,4 @@ class StartView : BaseView<StartViewModel>() {
             is StartViewModel.Output.ShowText -> text.visible()
         }
     }
-
 }
