@@ -2,9 +2,9 @@ package dk.adaptmobile.android_seed;
 
 import android.content.Intent
 import android.os.Bundle
-import dk.adaptmobile.android_seed.base.SuperActivity
+import androidx.fragment.app.FragmentActivity
 
-class SplashActivity : SuperActivity() {
+class SplashActivity : FragmentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

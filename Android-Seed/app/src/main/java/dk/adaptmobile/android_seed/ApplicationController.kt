@@ -1,30 +1,27 @@
 package dk.adaptmobile.android_seed
 
-import android.app.Application
-import android.content.Context
-import androidx.multidex.MultiDex
+import androidx.multidex.MultiDexApplication
 import com.crashlytics.android.Crashlytics
-import com.squareup.leakcanary.LeakCanary
+import dk.adaptmobile.android_seed.util.CrashlyticsTree
 import io.fabric.sdk.android.Fabric
+import timber.log.Timber
 
 /**
  * Created by elek on 16/11/16.
  */
 
-class ApplicationController : Application() {
+@Suppress("ConstantConditionIf")
+class ApplicationController : MultiDexApplication() {
     override fun onCreate() {
         super.onCreate()
 
-        if (LeakCanary.isInAnalyzerProcess(this)) {
-            return // This process is dedicated to LeakCanary for heap analysis. You should not init your app in this process.
+        if (BuildConfig.CRASHLYTICS_ENABLED) {
+            Fabric.with(this, Crashlytics())
+            Timber.plant(CrashlyticsTree())
         }
-        LeakCanary.install(this)
 
-        Fabric.with(this, Crashlytics())
-    }
-
-    override fun attachBaseContext(base: Context?) {
-        super.attachBaseContext(base)
-        MultiDex.install(this)
+        if (BuildConfig.DEBUG) {
+            Timber.plant(Timber.DebugTree())
+        }
     }
 }

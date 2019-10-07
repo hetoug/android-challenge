@@ -1,55 +1,29 @@
 package dk.adaptmobile.android_seed
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import com.bluelinelabs.conductor.Conductor
-import com.bluelinelabs.conductor.Router
-import dk.adaptmobile.amkotlinutil.extensions.AnimationType
-import dk.adaptmobile.amkotlinutil.extensions.pushView
-import dk.adaptmobile.android_seed.base.SuperActivity
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
+import dk.adaptmobile.amkotlinutil.navigation.NavManager
+import dk.adaptmobile.android_seed.base.RemoteConfigActivity
+import dk.adaptmobile.android_seed.screens.Routing
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : SuperActivity() {
-
-    companion object {
-        fun start(context: Context) {
-            val intent = Intent(context, MainActivity::class.java)
-            context.startActivity(intent)
-        }
-    }
-
-    private lateinit var router: Router
-    private lateinit var viewModel: MainActivityViewModel
-    private val disposeBag = CompositeDisposable()
+class MainActivity : RemoteConfigActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        mainRouter = Conductor.attachRouter(this, mainContainer, savedInstanceState)
+        modalRouter = Conductor.attachRouter(this, modalContainer, savedInstanceState)
+        modalRouter.setPopsLastView(true) //We want it to be possible to pop the last view on the modal controller only
 
-        viewModel = MainActivityViewModel()
-        router = Conductor.attachRouter(this, container, savedInstanceState)
-        viewModel.firstView.subscribe {
-            if (!router.hasRootController()) {
-                router.pushView(it.controller, AnimationType.None, asRoot = true)
-            }
-        }.addTo(disposeBag)
+        handleRouting()
+
+        NavManager.open(Routing.Start())
     }
 
-    override fun onBackPressed() {
-        if (!router.handleBack()) super.onBackPressed()
+    override fun showMinimumVersionDialog() {
+        super.showMinimumVersionDialog()
+//        NavManager.openModally(Routing.MinimumVersionDialog())
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        if (!disposeBag.isDisposed) {
-            disposeBag.dispose()
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        router.onActivityResult(requestCode, resultCode, data)
-    }
 }

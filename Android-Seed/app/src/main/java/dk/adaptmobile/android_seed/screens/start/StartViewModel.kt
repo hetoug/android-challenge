@@ -1,22 +1,23 @@
 package dk.adaptmobile.android_seed.screens.start
 
-import dk.adaptmobile.android_seed.base.BaseViewModel
+import dk.adaptmobile.amkotlinutil.navigation.BaseViewModel
+import dk.adaptmobile.android_seed.extensions.subscribeToInput
+import dk.adaptmobile.android_seed.screens.start.StartViewModel.Input
+import dk.adaptmobile.android_seed.screens.start.StartViewModel.Output
+import io.reactivex.Observable
 
-/**
- * Created by Alex on 5/8/18
- */
-class StartViewModel(val view: StartView) : BaseViewModel() {
-    sealed class Output : IOutput {
+class StartViewModel : BaseViewModel<Input, Output>() {
+    sealed class Output : BaseViewModel.IOutput() {
         object ShowText : Output()
     }
 
-    sealed class Input : IInput {
-        object ButtonClicked : Input()
-    }
+    data class Input(
+            val buttonClicked: Observable<Unit>
+    ) : BaseViewModel.IInput()
 
-    override fun handleInput(input: IInput) {
-        when (input) {
-            is Input.ButtonClicked -> output.onNext(Output.ShowText)
+    override fun handleInput(input: Input) {
+        input.buttonClicked.subscribeToInput(disposeBag) {
+            output.onNext(Output.ShowText)
         }
     }
 }
