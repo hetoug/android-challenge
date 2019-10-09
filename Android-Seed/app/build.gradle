@@ -31,6 +31,10 @@ android {
         targetCompatibility 1.8
     }
 
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
     signingConfigs {
         debug { //SHA1 15:56:88:D5:D2:A0:4D:7D:0C:5A:14:F8:4E:52:32:08:80:02:3B:40
             storeFile file('../../launch/amDebug.keystore')
@@ -153,9 +157,11 @@ dependencies {
     implementation "com.jakewharton.rxbinding3:rxbinding-appcompat:3.0.0"
     implementation "com.jakewharton.rxbinding3:rxbinding-recyclerview:3.0.0"
     implementation "com.jakewharton.rxbinding3:rxbinding-material:3.0.0"
+
     // --- UTIL --- //
-    implementation 'com.github.adaptmobile-organization:amkotlinutil:6.6.11'
+    implementation 'com.github.adaptmobile-organization:amkotlinutil:6.6.13'
     implementation 'com.github.hotchemi:khronos:0.9.0'
+    implementation 'com.greysonparrelli.permiso:permiso:0.3.0'
 
     // --- PERFORMANCE --- //
     implementation "com.crashlytics.sdk.android:crashlytics:2.10.1"
