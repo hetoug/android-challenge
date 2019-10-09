@@ -1,22 +1,15 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AMTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="buttonStyle">@style/AMButton</item>
-        <item name="android:textViewStyle">@style/AMTextView</item>
+
     </style>
 
-    <style name="AM2Theme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorPrimary">@color/colorPrimary2</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark2</item>
-        <item name="colorAccent">@color/colorAccent2</item>
-        <item name="buttonStyle">@style/Base.Widget.AppCompat.Button</item>
+    <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowBackground">@drawable/bg_splash</item>
     </style>
-
-
 
 </resources>

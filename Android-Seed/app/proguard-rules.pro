@@ -15,3 +15,22 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+# Crashlytics configuration
+-keepattributes *Annotation*
+-keepattributes SourceFile,LineNumberTable
+-keep class com.crashlytics.** { *; }
+-dontwarn com.crashlytics.**
+
+# Retain constructor that is called by using reflection to recreate the Controller
+-keepclassmembers public class * extends com.bluelinelabs.conductor.Controller {
+   public <init>();
+   public <init>(android.os.Bundle);
+}
+-keepclassmembers public class * extends com.bluelinelabs.conductor.ControllerChangeHandler {
+   public <init>();
+}
+
+-keepclassmembers class * implements android.os.Parcelable {
+    static *** CREATOR;
+}

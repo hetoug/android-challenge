@@ -1,40 +1,39 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'io.fabric'
 
 ext {
-    supportLibVersion = '25.1.0'
-    playLibVersion = '10.0.1'
+    conductorVersion = '2.1.5'
+    leakcanaryVersion = '2.0-beta-3'
+}
+
+androidExtensions {
+    experimental = true
 }
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion "25.0.2"
+    compileSdkVersion 29
 
-    def versionPropsFile = file('version.properties')
-
-    if (versionPropsFile.canRead()) {
-        def Properties versionProps = new Properties()
-
-        versionProps.load(new FileInputStream(versionPropsFile))
-
-        def code = versionProps['VERSION_CODE'].toInteger() + 1
-
-        versionProps['VERSION_CODE']=code.toString()
-        versionProps.store(versionPropsFile.newWriter(), null)
-
-        defaultConfig {
-            applicationId "dk.adaptmobile.android_seed"
-            minSdkVersion 16
-            targetSdkVersion 25
-            versionCode code
-            versionName "1.0"
-            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        }
-    }
-    else {
-        throw new GradleException("Could not read version.properties!")
+    defaultConfig {
+        applicationId "dk.adaptmobile.android_seed"
+        minSdkVersion 23
+        targetSdkVersion 29
+        versionCode 1
+        versionName "1.0.0"
+        vectorDrawables.useSupportLibrary = true
+        multiDexEnabled true
     }
 
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
+    }
 
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 
     signingConfigs {
         debug { //SHA1 15:56:88:D5:D2:A0:4D:7D:0C:5A:14:F8:4E:52:32:08:80:02:3B:40
@@ -44,10 +43,10 @@ android {
             keyPassword "adaptDebug"
         }
         stage {
-            storeFile file('../../launch/CHANGE.keystore')
-            storePassword "CHANGE"
-            keyAlias "CHANGE"
-            keyPassword "CHANGE"
+            storeFile file('../../launch/amDebug.keystore')
+            storePassword "adaptDebug"
+            keyAlias "adaptDebug"
+            keyPassword "adaptDebug"
         }
         release {
             storeFile file("../../launch/CHANGE.keystore")
@@ -57,63 +56,128 @@ android {
         }
     }
 
+    flavorDimensions "default"
+
     productFlavors {
         dev {
-            minSdkVersion 21
+            versionCode 1
         }
         prod {
-            minSdkVersion 16
+            versionCode 1
         }
     }
+
+    //Performance optimizations
+    applicationVariants.all { variant ->
+        if (variant.buildType.name == "debug") {
+            variant.mergedFlavor.resourceConfigurations.add("en")
+            variant.mergedFlavor.resourceConfigurations.add("xxhdpi")
+        }
+    }
+
     buildTypes {
         debug {
+            //Performance optimizations
+            ext.alwaysUpdateBuildId = false // Disable crashlytics build ID on debug
+            aaptOptions.cruncherEnabled = false //Disable PNG crunching or use WebP, defaults to false in debug for Android plugin 3.0
+            splits.abi.enable = false //Disable ABI splits
+            splits.density.enable = false //disable density splits
+
             minifyEnabled false
             applicationIdSuffix ".debug"
-            resValue "string", "app_name", "AMSeed Dev"
+            resValue "string", "app_name", "CHANGE Dev"
+            buildConfigField "int", "HTTP_LOGLEVEL", "2"
+            buildConfigField "String", "BASE_URL", "\"\""
+            buildConfigField "long", "REMOTE_CONFIG_CACHE_EXPIRATION_SECONDS", "0"
+            buildConfigField "boolean", "CRASHLYTICS_ENABLED", "false"
             debuggable true
         }
         stage {
             minifyEnabled false
-            applicationIdSuffix ".beta"
-            resValue "string", "app_name", "AMSeed Beta"
+            applicationIdSuffix ".stage"
+            resValue "string", "app_name", "CHANGE Stage"
+            buildConfigField "int", "HTTP_LOGLEVEL", "2"
+            buildConfigField "String", "BASE_URL", "\"\""
+            buildConfigField "long", "REMOTE_CONFIG_CACHE_EXPIRATION_SECONDS", "0"
+            buildConfigField "boolean", "CRASHLYTICS_ENABLED", "true"
             debuggable true
             signingConfig signingConfigs.stage
         }
         release {
             minifyEnabled false
-            resValue "string", "app_name", "AMSeed"
+            resValue "string", "app_name", "CHANGE"
+            buildConfigField "int", "HTTP_LOGLEVEL", "0"
+            buildConfigField "String", "BASE_URL", "\"\""
+            buildConfigField "long", "REMOTE_CONFIG_CACHE_EXPIRATION_SECONDS", "600"
+            buildConfigField "boolean", "CRASHLYTICS_ENABLED", "true"
             signingConfig signingConfigs.release
         }
     }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile "com.android.support:appcompat-v7:${supportLibVersion}"
-    compile "com.google.android.gms:play-services-base:${playLibVersion}"
-    compile 'com.github.adaptmobile-organization:amutil:1.1.8'
-    compile 'com.greysonparrelli.permiso:permiso:0.3.0'
-    compile 'uk.co.chrisjenx:calligraphy:2.2.0'
-    compile 'com.jakewharton:butterknife:8.4.0'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.5.1'
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    // --- ANDROID --- //
+    implementation 'com.google.android.material:material:1.1.0-alpha10'
+    implementation 'androidx.multidex:multidex:2.0.1'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+    implementation 'androidx.vectordrawable:vectordrawable:1.1.0'
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
+    implementation 'androidx.biometric:biometric:1.0.0-beta02'
+    implementation "androidx.preference:preference-ktx:1.1.0"
 
-    debugCompile 'com.github.adaptmobile-organization:amtestutil:1.0.3'
-    testCompile 'junit:junit:4.12'
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    androidTestCompile ('com.android.support.test.espresso:espresso-contrib:2.2.2'){
-        exclude group: 'com.android.support', module: 'appcompat-v7'
-        exclude group: 'com.android.support', module: 'support-v4'
-        exclude group: 'com.android.support', module: 'design'
-        exclude module: 'recyclerview-v7'
-    }
-    androidTestCompile ('com.android.support.test.espresso:espresso-web:2.2.2') {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    }
-    androidTestCompile "com.android.support:support-annotations:${supportLibVersion}"
-    androidTestCompile 'com.android.support.test:runner:0.5'
-    androidTestCompile 'com.android.support.test:rules:0.4'
+    //KOTLIN
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation 'com.github.ajalt:timberkt:1.5.1'
 
-    androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.1'
+    //CONDUCTOR
+    implementation "com.bluelinelabs:conductor:$conductorVersion"
+    implementation "com.bluelinelabs:conductor-support:$conductorVersion"
+    implementation "com.bluelinelabs:conductor-rxlifecycle2:$conductorVersion"
+
+    // --- NETWORK --- //
+    implementation 'com.squareup.retrofit2:retrofit:2.6.2'
+    implementation "com.squareup.retrofit2:converter-moshi:2.6.2"
+    implementation "com.github.akarnokd:rxjava3-retrofit-adapter:3.0.0-RC3"
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.2.1'
+
+    // --- JSON parsing --- //
+    implementation "com.squareup.moshi:moshi:1.8.0"
+    implementation "com.squareup.moshi:moshi-kotlin:1.8.0"
+    implementation 'com.squareup.moshi:moshi-adapters:1.8.0'
+    kapt "com.squareup.moshi:moshi-kotlin-codegen:1.8.0"
+
+    // --- RX --- //
+    implementation 'io.reactivex.rxjava3:rxjava:3.0.0-RC3'
+    implementation 'io.reactivex.rxjava3:rxandroid:3.0.0-SNAPSHOT'
+    implementation 'io.reactivex.rxjava2:rxkotlin:2.3.0'
+    implementation "com.jakewharton.rxbinding3:rxbinding:3.0.0"
+    implementation "com.jakewharton.rxbinding3:rxbinding-core:3.0.0"
+    implementation "com.jakewharton.rxbinding3:rxbinding-appcompat:3.0.0"
+    implementation "com.jakewharton.rxbinding3:rxbinding-recyclerview:3.0.0"
+    implementation "com.jakewharton.rxbinding3:rxbinding-material:3.0.0"
+
+    // --- UTIL --- //
+    implementation 'com.github.adaptmobile-organization:amkotlinutil:6.6.13'
+    implementation 'com.github.hotchemi:khronos:0.9.0'
+    implementation 'com.greysonparrelli.permiso:permiso:0.3.0'
+
+    // --- PERFORMANCE --- //
+    implementation "com.crashlytics.sdk.android:crashlytics:2.10.1"
+    debugImplementation"com.squareup.leakcanary:leakcanary-android:$leakcanaryVersion"
+
+    // --- UI --- //
+    implementation 'com.github.bumptech.glide:glide:4.9.0'
+    implementation 'jp.wasabeef:recyclerview-animators:3.0.0'
+    implementation 'com.github.fondesa:recycler-view-divider:3.0.0'
+    implementation 'com.xwray:groupie:2.5.1'
+    implementation 'com.xwray:groupie-kotlin-android-extensions:2.5.1'
+
+    // --- FIREBASE --- //
+    implementation 'com.google.firebase:firebase-core:17.2.0'
+    implementation 'com.google.firebase:firebase-messaging:20.0.0'
+    implementation "com.google.firebase:firebase-analytics:17.2.0"
+    implementation "com.google.firebase:firebase-config:19.0.2"
+
 }
