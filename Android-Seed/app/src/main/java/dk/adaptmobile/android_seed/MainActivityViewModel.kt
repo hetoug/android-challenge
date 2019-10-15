@@ -12,8 +12,8 @@ import io.reactivex.subjects.PublishSubject
 @SuppressLint("CheckResult")
 class MainActivityViewModel {
     private val disposeBag = DisposeBag()
-    public val output: PublishSubject<Output> = PublishSubject.create()
-    public val input: PublishSubject<Input> = PublishSubject.create()
+    val output: PublishSubject<Output> = PublishSubject.create()
+    val input: PublishSubject<Input> = PublishSubject.create()
 
     sealed class Output {
         data class ShowLoading(val show: Boolean) : Output()
@@ -47,6 +47,4 @@ class MainActivityViewModel {
             output.onNext(Output.ShowNoNetworkError(it))
         }.addTo(disposeBag)
     }
-
-
 }

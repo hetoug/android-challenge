@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.Activity
 import android.content.Context
+import android.hardware.biometrics.BiometricManager as AndroidBiometricManager
 import android.hardware.biometrics.BiometricManager.BIOMETRIC_SUCCESS
 import android.os.Build
 import androidx.annotation.StringRes
@@ -16,8 +17,6 @@ import com.github.ajalt.timberkt.Timber.e
 import dk.adaptmobile.android_seed.R
 import io.reactivex.Single
 import java.util.concurrent.Executors
-import android.hardware.biometrics.BiometricManager as AndroidBiometricManager
-
 
 /**
  * Biometric authentication manager
@@ -45,8 +44,7 @@ object BiometricManager {
         return createObservable(activity, promptInfo)
     }
 
-
-    sealed class AuthenticationPrompt(@StringRes val title: Int, @StringRes val description: Int, @StringRes val negativeButtonText: Int){
+    sealed class AuthenticationPrompt(@StringRes val title: Int, @StringRes val description: Int, @StringRes val negativeButtonText: Int) {
         object Default : AuthenticationPrompt(R.string.default_biometric_title, R.string.default_biometric_description, R.string.negativeButtonText)
     }
 
@@ -61,7 +59,7 @@ object BiometricManager {
         object ErrorCancelled : BiometricStatus()
         object ErrorGeneral : BiometricStatus()
         object ErrorActivityNull : BiometricStatus()
-        object Success : BiometricStatus()    }
+        object Success : BiometricStatus() }
 
     private fun createObservable(activity: Activity?, promptInfo: BiometricPrompt.PromptInfo): Single<BiometricStatus> {
         return Single.create {
@@ -93,8 +91,6 @@ object BiometricManager {
             prompt.authenticate(promptInfo)
         }
     }
-
-
 
     private sealed class BiometricChecker {
 
@@ -140,5 +136,4 @@ object BiometricManager {
             }
         }
     }
-
 }

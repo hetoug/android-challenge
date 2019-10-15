@@ -53,7 +53,6 @@ open class RemoteConfigActivity : BaseActivity() {
     protected open fun onMinimumVersionChecked() {}
     protected open fun showMinimumVersionDialog() {}
 
-
     private fun checkMinimumVersion(): Boolean {
         val requiredVersion = firebaseRemoteConfig.getString(RC_MINIMUM_VERSION)
         val appVersion = BuildConfig.VERSION_NAME

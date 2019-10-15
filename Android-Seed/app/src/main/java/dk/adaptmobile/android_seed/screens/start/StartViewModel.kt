@@ -12,7 +12,7 @@ class StartViewModel : BaseViewModel<Input, Output>() {
     }
 
     data class Input(
-            val buttonClicked: Observable<Unit>
+        val buttonClicked: Observable<Unit>
     ) : BaseViewModel.IInput()
 
     override fun handleInput(input: Input) {

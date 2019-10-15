@@ -26,5 +26,4 @@ class MainActivity : RemoteConfigActivity() {
         super.onDestroy()
         viewModel.input.onNext(Input.OnDestroy)
     }
-
 }

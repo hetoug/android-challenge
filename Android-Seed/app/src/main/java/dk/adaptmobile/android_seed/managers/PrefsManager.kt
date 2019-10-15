@@ -17,7 +17,6 @@ object PrefsManager {
     }
 
     fun clear() {
-
     }
 
     private sealed class PreferenceFieldDelegate<T>(protected val key: kotlin.String, protected val default: T) : ReadWriteProperty<PrefsManager, T> {

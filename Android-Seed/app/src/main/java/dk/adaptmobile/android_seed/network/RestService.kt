@@ -14,5 +14,4 @@ interface RestService {
 
     @POST("api/v1/test")
     fun postRequest(@Body request: TestRequest): Observable<TestResponse>
-
 }
