@@ -1,6 +1,21 @@
 # AdaptMobile Android Seed project
 A good starting point for future Android apps!
 
+## Requirements
+Have python an brew installed on your mac.
+
+For installing homebrew (remember to have xcode installed):
+
+```bash
+/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+```
+
+For installing the latest python 3:
+
+```bash
+brew install python3
+```
+
 ## Pre-commit Installation
 At the root of the project run this command:
 
