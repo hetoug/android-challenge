@@ -50,9 +50,9 @@ android {
         }
         release {
             storeFile file("../../launch/release.keystore")
-            storePassword "testerrr"
-            keyAlias "tester"
-            keyPassword "testerrr"
+            storePassword "KEYSTORE_PASSWORD"
+            keyAlias "KEYSTORE_ALIAS"
+            keyPassword "KEYSTORE_PASSWORD"
         }
     }
 
