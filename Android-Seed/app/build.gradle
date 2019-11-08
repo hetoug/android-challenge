@@ -49,10 +49,10 @@ android {
             keyPassword "adaptDebug"
         }
         release {
-            storeFile file("../../launch/CHANGE.keystore")
-            storePassword "CHANGE"
-            keyAlias "CHANGE"
-            keyPassword "CHANGE"
+            storeFile file("../../launch/release.keystore")
+            storePassword "testerrr"
+            keyAlias "tester"
+            keyPassword "testerrr"
         }
     }
 
@@ -85,7 +85,7 @@ android {
 
             minifyEnabled false
             applicationIdSuffix ".debug"
-            resValue "string", "app_name", "CHANGE Dev"
+            resValue "string", "app_name", "APP_NAME_CHANGE Dev"
             buildConfigField "int", "HTTP_LOGLEVEL", "2"
             buildConfigField "String", "BASE_URL", "\"\""
             buildConfigField "long", "REMOTE_CONFIG_CACHE_EXPIRATION_SECONDS", "0"
@@ -95,7 +95,7 @@ android {
         stage {
             minifyEnabled false
             applicationIdSuffix ".stage"
-            resValue "string", "app_name", "CHANGE Stage"
+            resValue "string", "app_name", "APP_NAME_CHANGE Stage"
             buildConfigField "int", "HTTP_LOGLEVEL", "2"
             buildConfigField "String", "BASE_URL", "\"\""
             buildConfigField "long", "REMOTE_CONFIG_CACHE_EXPIRATION_SECONDS", "0"
@@ -105,7 +105,7 @@ android {
         }
         release {
             minifyEnabled false
-            resValue "string", "app_name", "CHANGE"
+            resValue "string", "app_name", "APP_NAME_CHANGE"
             buildConfigField "int", "HTTP_LOGLEVEL", "0"
             buildConfigField "String", "BASE_URL", "\"\""
             buildConfigField "long", "REMOTE_CONFIG_CACHE_EXPIRATION_SECONDS", "600"
