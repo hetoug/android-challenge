@@ -1,7 +1,7 @@
 package dk.adaptmobile.android_seed.screens.start
 
+import dk.adaptmobile.amkotlinutil.extensions.subscribeToInput
 import dk.adaptmobile.amkotlinutil.navigation.BaseViewModel
-import dk.adaptmobile.android_seed.extensions.subscribeToInput
 import dk.adaptmobile.android_seed.screens.start.StartViewModel.Input
 import dk.adaptmobile.android_seed.screens.start.StartViewModel.Output
 import io.reactivex.Observable
