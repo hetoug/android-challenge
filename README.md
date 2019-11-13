@@ -2,7 +2,7 @@
 A good starting point for future Android apps!
 
 ## Requirements
-Have python an brew installed on your mac.
+Have python and homebrew installed on your mac.
 
 For installing homebrew (remember to have xcode installed):
 
