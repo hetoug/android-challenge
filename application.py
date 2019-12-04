@@ -76,7 +76,7 @@ if __name__ == '__main__':
     rename_root_module()
 
     app_name = input("What's the app name: ")
-    # rename_app_name()
+    rename_app_name()
 
     package_name = input("Enter new package name like -> dk.adaptmobile.android_seed: ")
     rename_package_dirs()
