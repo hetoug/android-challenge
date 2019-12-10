@@ -86,4 +86,4 @@ if __name__ == '__main__':
     rename_keystore_fields()
     generate_keystore()  # Should be run at the end
 
-    os.remove("application.py")
+    os.remove("setup.py")
