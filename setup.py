@@ -84,6 +84,6 @@ if __name__ == '__main__':
     alias = input("Alias for the keystore: ")
     password = input("Password for the keystore: ")
     rename_keystore_fields()
-    generate_keystore()  # Should be run at the end
+    generate_keystore()  # Should be run at the end before removing the setup.py file
 
-    os.remove("application.py")
+    os.remove("setup.py")
