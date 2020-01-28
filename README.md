@@ -31,7 +31,7 @@ It will clone the seed project and change directory into the project and run the
 git clone git@github.com:adaptdk/adaptmobile-android-seed.git && cd $(basename $_ .git) && python3 setup.py
 ```
 
-## Setup
+## Setup (If you already have the project cloned)
 
 Run the python script `setup.py` and follow the steps for setting up the project.
 
