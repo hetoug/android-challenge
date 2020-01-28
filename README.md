@@ -22,6 +22,15 @@ brew install python3
 brew install bitrise
 ```
 
+## Clone and Setup
+
+If you dont wan't to manually copy the git url and then type two commands, then just run this in your terminal.
+It will clone the seed project and change directory into the project and run the `setup? python script.
+
+```bash
+git clone git@github.com:adaptdk/adaptmobile-android-seed.git && cd $(basename $_ .git) && python3 setup.py
+```
+
 ## Setup
 
 Run the python script `setup.py` and follow the steps for setting up the project.
