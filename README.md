@@ -4,7 +4,7 @@ A good starting point for future Android apps!
 
 ## Requirements
 
-Have python and homebrew installed on your mac.
+Have bitrise, python and homebrew installed on your mac.
 
 For installing homebrew (remember to have xcode installed):
 
@@ -16,6 +16,10 @@ For installing the latest python 3:
 
 ```bash
 brew install python3
+```
+
+```bash
+brew install bitrise
 ```
 
 ## Setup
