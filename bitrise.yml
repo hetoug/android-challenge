@@ -182,7 +182,7 @@
             - content: "#!/usr/bin/env bash\n\necho $BITRISE_APK_PATH\necho $BITRISE_APK_PATH_LIST\necho
                 $BITRISE_APP_DIR_PATH\necho $GIT_CLONE_COMMIT_AUTHOR_NAME \necho $GIT_CLONE_COMMIT_MESSAGE_BODY\necho
                 $GIT_CLONE_COMMIT_MESSAGE_SUBJECT\n\nchmod +x ./upload/aapt && chmod +x
-                ./upload/upload.sh\n./upload/upload.sh -apk $BITRISE_APK_PATH -env PROD
+                ./upload/upload.sh\n./upload/upload.sh -apk $BITRISE_APK_PATH -env RELEASE
                 -m \"$GIT_CLONE_COMMIT_MESSAGE_SUBJECT\""
         - cache-push@2.2.0: {}
         envs:
