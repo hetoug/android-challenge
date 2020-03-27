@@ -120,9 +120,9 @@ def change_remote_url():
     subprocess.run(["git", "remote", "--verbose"])
 
 
-def initial_commit(commit_message):
+def initial_commit():
     subprocess.run(["git", "add", "--all"])
-    subprocess.run(["git", "commit", "-m", "Initial commit"])  # TODO: could be user commit message
+    subprocess.run(["git", "commit", "-m", "Initial commit"])
     subprocess.run(["git", "push", "-u", "origin", "master"])
 
 
@@ -133,9 +133,12 @@ def setup_branch(branch):
     subprocess.run(["git", "push", "--set-upstream", "origin", branch])
 
 
-def setup_bitrise():
+def rename_bitrise_project_location_placeholder():
     find_and_replace(find=project_module, replace=BITRISE_PROJECT_LOCATION_PLACEHOLDER, file_name=BITRISE_YAML_FILE)
     print(f'Changed Bitrise PROJECT_LOCATION to: {project_module}')
+
+
+def setup_bitrise():
     cmd = 'bash -c "bash <(curl -sfL "https://raw.githubusercontent.com/bitrise-io/bitrise-add-new-project/master/_scripts/run.sh") --api-token "hR18IV6hsnIK0RlooV_qlCeOC8NtyjuqQ1aIlqwsIwRNvTDdUcwLrwjICllpIO4UMRsITbVghvc_cuLJOoxyZA" --org "4a2ac90a198eb532" --public "false" --website"'
     args = shlex.split(cmd)
     subprocess.run(args)
@@ -144,6 +147,8 @@ def setup_bitrise():
 if __name__ == '__main__':
     project_module = input("Name project module: ")
     rename_project_module()
+
+    rename_bitrise_project_location_placeholder()
 
     project_module_path = "{0}/{1}".format(os.getcwd(), project_module)
 
@@ -164,7 +169,7 @@ if __name__ == '__main__':
 
     os.remove("setup.py")
 
-    initial_commit("Initial commit")
+    initial_commit()
     setup_branch("stage")
     setup_branch("develop")
 
