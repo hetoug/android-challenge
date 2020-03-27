@@ -1,6 +1,7 @@
 import fileinput
 import os
 import shlex
+import shutil
 import subprocess
 
 OLD_SEED_MODULE = "Android-Seed"
@@ -31,6 +32,47 @@ def find_replace_in_dir(directory, find, replace):
                     file.write(file_text)
 
 
+def move_folder(source, destination, avoid_folders=()):
+    for _, dirs, files in os.walk(os.path.abspath(source)):
+        for avoid_folder in avoid_folders:
+            if avoid_folder in dirs:
+                dirs.remove(avoid_folder)
+        for _dir in dirs:
+            shutil.move('{0}/{1}'.format(source, _dir), destination)
+        for _file in files:
+            shutil.move('{0}/{1}'.format(source, _file), destination)
+
+
+def dynamic_folder_structure(seed_package_name_split, new_package_name_split):
+    old_package_count = len(seed_package_name_split)
+    new_package_count = len(new_package_name_split)
+
+    ranger = range(old_package_count) if old_package_count >= new_package_count else range(new_package_count)
+    count_condition = old_package_count if old_package_count <= new_package_count else new_package_count
+
+    avoid_folders = []
+    cwd = ""
+    folder = ""
+    for i in ranger:
+        if i < count_condition:
+            os.rename(seed_package_name_split[i], new_package_name_split[i])
+            os.chdir(new_package_name_split[i])
+            cwd = os.getcwd()
+            folder = cwd
+        elif i > old_package_count - 1:
+            avoid_folders.append(new_package_name_split[i])
+            folder += "/" + new_package_name_split[i]
+            os.mkdir(folder)
+            if i == new_package_count - 1:
+                move_folder(source=cwd, destination=folder, avoid_folders=avoid_folders)
+            else:
+                os.chdir(new_package_name_split[i])
+        else:
+            source = '{0}/{1}'.format(cwd, seed_package_name_split[i])
+            move_folder(source=source, destination=cwd)
+            os.rmdir(source)
+
+
 # This generates the keystore without the keytool cli.
 def generate_keystore():
     os.chdir("launch")
@@ -42,50 +84,58 @@ def generate_keystore():
 
 
 def rename_package_dirs():
-    os.chdir(root_module + APP_JAVA_PATH)
-
-    seed_package_name_split = SEED_PACKAGE_NAME.split(".")
-    new_package_name_split = package_name.split(".")
-
-    for i in range(len(seed_package_name_split)):
-        os.rename(seed_package_name_split[i], new_package_name_split[i])
-        os.chdir(new_package_name_split[i])
-
-    os.chdir('../../../../../../..')
+    os.chdir(project_module + APP_JAVA_PATH)
+    dynamic_folder_structure(SEED_PACKAGE_NAME.split("."), package_name.split("."))
+    os.chdir(project_module_path)
     find_replace_in_dir(os.getcwd(), SEED_PACKAGE_NAME, package_name)
     os.chdir('..')
 
 
 def rename_app_name():
-    find_and_replace(find=app_name, replace=APP_NAME_CHANGE, file_name=root_module + APP_BUILD_GRADLE)
+    find_and_replace(find=app_name, replace=APP_NAME_CHANGE, file_name=project_module + APP_BUILD_GRADLE)
     print(f'Changed app_name to {app_name}')
 
 
-def rename_root_module():
-    os.rename("Android-Seed", root_module)
-    print(f'Renamed root module to {root_module}')
+def rename_project_module():
+    os.rename(OLD_SEED_MODULE, project_module)
+    print(f'Renamed project module to {project_module}')
 
 
 def rename_keystore_fields():
-    find_and_replace(find=alias, replace=KEYSTORE_ALIAS, file_name=root_module + APP_BUILD_GRADLE)
-    find_and_replace(find=password, replace=KEYSTORE_PASSWORD, file_name=root_module + APP_BUILD_GRADLE)
+    find_and_replace(find=alias, replace=KEYSTORE_ALIAS, file_name=project_module + APP_BUILD_GRADLE)
+    find_and_replace(find=password, replace=KEYSTORE_PASSWORD, file_name=project_module + APP_BUILD_GRADLE)
 
 
 def create_private_repo():
-    subprocess.run(["hub", "create", "--private", "adaptdk/{repo_name}".format(repo_name=root_module)])
+    subprocess.run(["hub", "create", "--private", "adaptdk/{repo_name}".format(repo_name=project_module)])
 
 
 def change_remote_url():
     subprocess.run(
         ["git", "remote", "set-url", "origin",
-         "git@github.com:{org}/{repo_name}.git".format(org=GITHUB_ORG, repo_name=root_module)])
+         "git@github.com:{org}/{repo_name}.git".format(org=GITHUB_ORG, repo_name=project_module)])
     print(f'Changed remote origin url to: ')
     subprocess.run(["git", "remote", "--verbose"])
 
 
+def initial_commit(commit_message):
+    subprocess.run(["git", "add", "--all"])
+    subprocess.run(["git", "commit", "-m", "Initial commit"])  # TODO: could be user commit message
+    subprocess.run(["git", "push", "-u", "origin", "master"])
+
+
+def setup_branch(branch):
+    subprocess.run(["git", "checkout", "-b", branch])
+    print(f'Changed branch to: ')
+    subprocess.run(["git", "branch"])
+    subprocess.run(["git", "push", "--set-upstream", "origin", branch])
+
+
 if __name__ == '__main__':
-    root_module = input("Name root module: ")
-    rename_root_module()
+    project_module = input("Name project module: ")
+    rename_project_module()
+
+    project_module_path = "{0}/{1}".format(os.getcwd(), project_module)
 
     app_name = input("What's the app name: ")
     rename_app_name()
@@ -96,10 +146,14 @@ if __name__ == '__main__':
     alias = input("Alias for the keystore: ")
     password = input("Password for the keystore: ")
     rename_keystore_fields()
-    generate_keystore()  # Should be run at the end
+    generate_keystore()
 
     create_private_repo()
 
     change_remote_url()
 
     os.remove("setup.py")
+
+    initial_commit("Initial commit")
+    setup_branch("stage")
+    setup_branch("develop")
