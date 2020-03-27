@@ -12,6 +12,8 @@ KEYSTORE_ALIAS = "KEYSTORE_ALIAS"
 SEED_PACKAGE_NAME = "dk.adaptmobile.android_seed"
 APP_JAVA_PATH = "/app/src/main/java"
 GITHUB_ORG = "adaptdk"
+BITRISE_PROJECT_LOCATION_PLACEHOLDER = "SEED_PROJECT_NAME"
+BITRISE_YAML_FILE = "bitrise.yml"
 
 
 def find_and_replace(find, replace, file_name):
@@ -131,6 +133,14 @@ def setup_branch(branch):
     subprocess.run(["git", "push", "--set-upstream", "origin", branch])
 
 
+def setup_bitrise():
+    find_and_replace(find=project_module, replace=BITRISE_PROJECT_LOCATION_PLACEHOLDER, file_name=BITRISE_YAML_FILE)
+    print(f'Changed Bitrise PROJECT_LOCATION to: {project_module}')
+    cmd = 'bash -c "bash <(curl -sfL "https://raw.githubusercontent.com/bitrise-io/bitrise-add-new-project/master/_scripts/run.sh") --api-token "hR18IV6hsnIK0RlooV_qlCeOC8NtyjuqQ1aIlqwsIwRNvTDdUcwLrwjICllpIO4UMRsITbVghvc_cuLJOoxyZA" --org "4a2ac90a198eb532" --public "false" --website"'
+    args = shlex.split(cmd)
+    subprocess.run(args)
+
+
 if __name__ == '__main__':
     project_module = input("Name project module: ")
     rename_project_module()
@@ -157,3 +167,5 @@ if __name__ == '__main__':
     initial_commit("Initial commit")
     setup_branch("stage")
     setup_branch("develop")
+
+    setup_bitrise()
