@@ -78,7 +78,7 @@ def dynamic_folder_structure(seed_package_name_split, new_package_name_split):
 # This generates the keystore without the keytool cli.
 def generate_keystore():
     os.chdir("launch")
-    cmd = f'keytool -genkey -v -keystore release.keystore -keyalg RSA -keysize 16384 -validity 10000 -alias {alias} -dname "cn=Unknown, ou=Unknown, o=Unknown, c=Unknown" -storepass {password} -keypass {password}'
+    cmd = f'keytool -genkey -v -keystore release.keystore -keyalg RSA -keysize 4096 -validity 10000 -alias {alias} -dname "cn=Unknown, ou=Unknown, o=Unknown, c=Unknown" -storepass {password} -keypass {password}'
     args = shlex.split(cmd)
     subprocess.Popen(args)
     os.chdir("..")
@@ -145,7 +145,7 @@ def setup_bitrise():
 
 
 if __name__ == '__main__':
-    project_module = input("Name project module: ")
+    project_module = input("Name project module: ").replace(" ", "-")
     rename_project_module()
 
     rename_bitrise_project_location_placeholder()
