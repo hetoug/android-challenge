@@ -18,13 +18,18 @@ For installing the latest python 3:
 brew install python3
 ```
 
+Needed for creating a Bitrise app project
+
 ```bash
 brew install bitrise
 ```
 
+Need for creating a new private repo for adaptdk organization
 ```bash
 brew install hub
 ```
+
+> Note: At a later time we will migrate over to [gh cli](https://github.com/cli/cli) instead of [hub](https://github.com/github/hub).
 
 ## Clone and Setup
 
@@ -32,7 +37,7 @@ If you dont wan't to manually copy the git url and then type two commands, then 
 It will clone the seed project and change directory into the project and run the `setup? python script.
 
 ```bash
-git clone git@github.com:adaptdk/adaptmobile-android-seed.git && cd $(basename $_ .git) && python3 setup.py
+git clone git@github.com:adaptdk/adaptmobile-android-seed.git && cd adaptmobile-android-seed && python3 setup.py
 ```
 
 ## Setup (If you already have the project cloned)
