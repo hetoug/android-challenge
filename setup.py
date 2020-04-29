@@ -5,7 +5,8 @@ import shutil
 import subprocess
 from pathlib import Path
 
-OLD_SEED_MODULE = "Android-Seed"
+OLD_SEED_NAME = "Android-Seed"
+OLD_PROJECT_NAME = "adaptmobile-android-seed"
 APP_BUILD_GRADLE = "/app/build.gradle"
 APP_NAME_CHANGE = "APP_NAME_CHANGE"
 KEYSTORE_PASSWORD = "KEYSTORE_PASSWORD"
@@ -88,36 +89,40 @@ def generate_keystore():
 
 
 def rename_package_dirs():
-    os.chdir(project_module + APP_SRC_PATH)
+    os.chdir(project_name + APP_SRC_PATH)
     dynamic_folder_structure(SEED_PACKAGE_NAME.split("."), package_name.split("."))
-    os.chdir(project_module_path)
+    os.chdir(project_name_path)
     find_replace_in_dir(os.getcwd(), SEED_PACKAGE_NAME, package_name)
     os.chdir('..')
 
 
 def rename_app_name():
-    find_and_replace(find=app_name, replace=APP_NAME_CHANGE, file_name=project_module + APP_BUILD_GRADLE)
+    find_and_replace(find=app_name, replace=APP_NAME_CHANGE, file_name=project_name + APP_BUILD_GRADLE)
     print(f'Changed app_name to {app_name}')
 
 
-def rename_project_module():
-    os.rename(OLD_SEED_MODULE, project_module)
-    print(f'Renamed project module to {project_module}')
+def rename_project():
+    os.rename(OLD_SEED_NAME, project_name)
+    os.chdir("..")
+    os.rename(OLD_PROJECT_NAME, project)
+    os.chdir(project)
+    print(f'Renamed project name to {project_name}')
+    print(f'Renamed project to {project}')
 
 
 def rename_keystore_fields():
-    find_and_replace(find=alias, replace=KEYSTORE_ALIAS, file_name=project_module + APP_BUILD_GRADLE)
-    find_and_replace(find=password, replace=KEYSTORE_PASSWORD, file_name=project_module + APP_BUILD_GRADLE)
+    find_and_replace(find=alias, replace=KEYSTORE_ALIAS, file_name=project_name + APP_BUILD_GRADLE)
+    find_and_replace(find=password, replace=KEYSTORE_PASSWORD, file_name=project_name + APP_BUILD_GRADLE)
 
 
 def create_private_repo():
-    subprocess.run(["hub", "create", "--private", "{org}/{repo_name}".format(org=GITHUB_ORG, repo_name=project_module)])
+    subprocess.run(["hub", "create", "--private", "{org}/{repo_name}".format(org=GITHUB_ORG, repo_name=project_name)])
 
 
 def change_remote_url():
     subprocess.run(
         ["git", "remote", "set-url", "origin",
-         "git@github.com:{org}/{repo_name}.git".format(org=GITHUB_ORG, repo_name=project_module)])
+         "git@github.com:{org}/{repo_name}.git".format(org=GITHUB_ORG, repo_name=project_name)])
     print(f'Changed remote origin url to: ')
     subprocess.run(["git", "remote", "--verbose"])
 
@@ -136,8 +141,8 @@ def setup_branch(branch):
 
 
 def rename_bitrise_project_location_placeholder():
-    find_and_replace(find=project_module, replace=BITRISE_PROJECT_LOCATION_PLACEHOLDER, file_name=BITRISE_YAML_FILE)
-    print(f'Changed Bitrise PROJECT_LOCATION to: {project_module}')
+    find_and_replace(find=project_name, replace=BITRISE_PROJECT_LOCATION_PLACEHOLDER, file_name=BITRISE_YAML_FILE)
+    print(f'Changed Bitrise PROJECT_LOCATION to: {project_name}')
 
 
 def read_bitrise_token() -> str:
@@ -168,12 +173,13 @@ def setup_bitrise():
 
 
 if __name__ == '__main__':
-    project_module = input("Name project module: ").replace(" ", "-")
-    rename_project_module()
+    project_name = input("Project name like --> Boligsigen: ").replace(" ", "-")
+    project = project_name.lower() + "-android"
+    rename_project()
 
     rename_bitrise_project_location_placeholder()
 
-    project_module_path = "{0}/{1}".format(os.getcwd(), project_module)
+    project_name_path = "{0}/{1}".format(os.getcwd(), project_name)
 
     app_name = input("What's the app name: ")
     rename_app_name()
