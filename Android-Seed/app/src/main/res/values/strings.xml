@@ -3,4 +3,8 @@
     <string name="default_biometric_title">Biometrisk login</string>
     <string name="default_biometric_description">Aktiver biometrisk login</string>
     <string name="negativeButtonText">Jeg ønsker ikke at bruge biometrisk login</string>
+    <string name="tab_first">First</string>
+    <string name="tab_second">Second</string>
+    <string name="tab_third">Third</string>
+    <string name="tab_fourth">Fourth</string>
 </resources>
