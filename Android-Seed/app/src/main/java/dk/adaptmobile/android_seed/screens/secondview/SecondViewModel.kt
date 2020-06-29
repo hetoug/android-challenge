@@ -1,8 +1,7 @@
-package dk.adaptmobile.android_seed.screens.`$2secondview`
+package dk.adaptmobile.android_seed.screens.secondview
 
 import dk.adaptmobile.android_seed.navigation.BaseViewModel
-import dk.adaptmobile.android_seed.screens.`$1firstview`.FirstViewModel
-import dk.adaptmobile.android_seed.screens.`$2secondview`.SecondViewModel.*
+import dk.adaptmobile.android_seed.screens.secondview.SecondViewModel.*
 import io.reactivex.Observable
 
 class SecondViewModel : BaseViewModel<Input, Output>() {

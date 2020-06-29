@@ -1,8 +1,8 @@
-package dk.adaptmobile.android_seed.screens.`$3thirdview`
+package dk.adaptmobile.android_seed.screens.thirdview
 
 import dk.adaptmobile.android_seed.navigation.BaseViewModel
-import dk.adaptmobile.android_seed.screens.`$1firstview`.FirstViewModel
-import dk.adaptmobile.android_seed.screens.`$3thirdview`.ThirdViewModel.*
+import dk.adaptmobile.android_seed.screens.thirdview.ThirdViewModel.*
+
 import io.reactivex.Observable
 
 class ThirdViewModel : BaseViewModel<Input, Output>() {

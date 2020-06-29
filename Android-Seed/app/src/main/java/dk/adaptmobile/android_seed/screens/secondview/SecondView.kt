@@ -4,9 +4,8 @@ import android.app.Activity
 import android.view.View
 import dk.adaptmobile.android_seed.R
 import dk.adaptmobile.android_seed.navigation.BaseView
-import dk.adaptmobile.android_seed.screens.`$1firstview`.FirstViewModel
-import dk.adaptmobile.android_seed.screens.`$2secondview`.SecondViewModel
-import dk.adaptmobile.android_seed.screens.`$2secondview`.SecondViewModel.*
+import dk.adaptmobile.android_seed.screens.secondview.SecondViewModel.*
+
 
 class SecondView : BaseView<SecondViewModel, Output>() {
     override fun setViewModel() = SecondViewModel()

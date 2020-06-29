@@ -9,8 +9,8 @@ import retrofit2.http.POST
 
 interface RestService {
 
-    @GET("api/v1/test")
-    fun getRequest(): Observable<TestResponse>
+    @GET("/")
+    fun getRequest(): Observable<String>
 
     @POST("api/v1/test")
     fun postRequest(@Body request: TestRequest): Observable<TestResponse>

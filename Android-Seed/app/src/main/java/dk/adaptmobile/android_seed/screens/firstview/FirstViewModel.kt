@@ -1,7 +1,7 @@
-package dk.adaptmobile.android_seed.screens.`$1firstview`
+package dk.adaptmobile.android_seed.screens.firstview
 
 import dk.adaptmobile.android_seed.navigation.BaseViewModel
-import dk.adaptmobile.android_seed.screens.`$1firstview`.FirstViewModel.*
+import dk.adaptmobile.android_seed.screens.firstview.FirstViewModel.*
 import io.reactivex.Observable
 
 class FirstViewModel : BaseViewModel<Input, Output>() {

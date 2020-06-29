@@ -8,6 +8,7 @@ import androidx.multidex.MultiDexApplication
 import com.github.ajalt.timberkt.e
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.icapps.niddler.core.AndroidNiddler
 import dk.adaptmobile.android_seed.BuildConfig
 import dk.adaptmobile.android_seed.managers.PrefsManager
 import dk.adaptmobile.android_seed.managers.TrackingManager
@@ -47,9 +48,9 @@ class ApplicationController : MultiDexApplication() {
             }
         })
 
-        setupLogging()
         setupTabs()
         setupDI()
+        setupLogging()
     }
 
     private fun setupTabs() {
@@ -66,16 +67,23 @@ class ApplicationController : MultiDexApplication() {
 
         //Error handler that will be called when onError is not set.
         RxJavaPlugins.setErrorHandler { e(it) }
-
-        //val crashlytics: FirebaseCrashlytics = FirebaseCrashlytics.getInstance()
-        throw RuntimeException("CRASH")
     }
 
     private fun setupDI() {
+
+        val niddler = AndroidNiddler.Builder()
+                .setPort(0)
+                .setNiddlerInformation(AndroidNiddler.fromApplication(this))
+                .setMaxStackTraceSize(10)
+                .build()
+
+        niddler.attachToApplication(this)
+
         val module = module {
             single { PrefsManager(get()) }
-            single { ConnectionManager() }
+            single { ConnectionManager(niddler) }
             single { NotificationManagerCompat.from(get()) }
+            single { FirebaseCrashlytics.getInstance() }
             single { TrackingManager(this@ApplicationController, get()) }
             factory { FirebaseAnalytics.getInstance(get()) }
         }
@@ -84,6 +92,8 @@ class ApplicationController : MultiDexApplication() {
             androidContext(this@ApplicationController.applicationContext)
             modules(module)
         }
+
+
     }
 }
 

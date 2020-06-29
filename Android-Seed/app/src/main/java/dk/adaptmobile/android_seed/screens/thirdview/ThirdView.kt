@@ -4,8 +4,8 @@ import android.app.Activity
 import android.view.View
 import dk.adaptmobile.android_seed.R
 import dk.adaptmobile.android_seed.navigation.BaseView
-import dk.adaptmobile.android_seed.screens.`$3thirdview`.ThirdViewModel
-import dk.adaptmobile.android_seed.screens.`$3thirdview`.ThirdViewModel.*
+import dk.adaptmobile.android_seed.screens.thirdview.ThirdViewModel.*
+
 
 class ThirdView : BaseView<ThirdViewModel, Output>() {
     override fun setViewModel() = ThirdViewModel()
