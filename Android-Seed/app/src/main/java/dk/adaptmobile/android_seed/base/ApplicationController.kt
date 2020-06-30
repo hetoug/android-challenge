@@ -9,6 +9,7 @@ import com.github.ajalt.timberkt.e
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.icapps.niddler.core.AndroidNiddler
+import com.icapps.niddler.core.Niddler
 import dk.adaptmobile.android_seed.BuildConfig
 import dk.adaptmobile.android_seed.managers.PrefsManager
 import dk.adaptmobile.android_seed.managers.TrackingManager
@@ -49,7 +50,7 @@ class ApplicationController : MultiDexApplication() {
         })
 
         setupTabs()
-        setupDI()
+        setupDI(attachNiddler())
         setupLogging()
     }
 
@@ -69,15 +70,7 @@ class ApplicationController : MultiDexApplication() {
         RxJavaPlugins.setErrorHandler { e(it) }
     }
 
-    private fun setupDI() {
-
-        val niddler = AndroidNiddler.Builder()
-                .setPort(0)
-                .setNiddlerInformation(AndroidNiddler.fromApplication(this))
-                .setMaxStackTraceSize(10)
-                .build()
-
-        niddler.attachToApplication(this)
+    private fun setupDI(niddler: AndroidNiddler) {
 
         val module = module {
             single { PrefsManager(get()) }
@@ -92,8 +85,17 @@ class ApplicationController : MultiDexApplication() {
             androidContext(this@ApplicationController.applicationContext)
             modules(module)
         }
+    }
 
-
+    private fun attachNiddler(): AndroidNiddler {
+        val niddler = AndroidNiddler.Builder()
+                .setPort(0)
+                .setNiddlerInformation(AndroidNiddler.fromApplication(this))
+                .setMaxStackTraceSize(10)
+                .build().apply {
+                    this.attachToApplication(this@ApplicationController)
+                }
+        return niddler
     }
 }
 
