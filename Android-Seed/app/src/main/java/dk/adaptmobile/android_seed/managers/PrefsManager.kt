@@ -6,15 +6,19 @@ import androidx.preference.PreferenceManager
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
-object PrefsManager {
+class PrefsManager(context: Context) {
 
-    private lateinit var preferences: SharedPreferences
+    private var preferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
 
-//    var key: String? by PreferenceFieldDelegate.String("KEY", "")
+    var favoriteSearchCounter: Int by PreferenceFieldDelegate.Int("BS2_FAVORITE_SEARCH", 0)
+    var favoritePropertyCounter: Int by PreferenceFieldDelegate.Int("BS2_FAVORITE_PROPERTY", 0)
+    var propertyDetailsOpenedCounter: Int by PreferenceFieldDelegate.Int("BS2_PROPERTY_DETAILS_OPENED", 0)
 
-    fun init(context: Context) {
-        preferences = PreferenceManager.getDefaultSharedPreferences(context)
-    }
+    var reviewGiven: Boolean by PreferenceFieldDelegate.Boolean("BS2_REVIEW_GIVEN", false)
+    var lastReviewDialogSeen: Long by PreferenceFieldDelegate.Long("BS2_LAST_REVIEW_DIALOG_SEEN", 0)
+    var reviewDialogSeenAmount: Int by PreferenceFieldDelegate.Int("BS2_REVIEW_DIALOG_SEEN_AMOUNT", 0)
+    var reviewShouldShow: Boolean by PreferenceFieldDelegate.Boolean("REVIEW_DIALOG_SHOULD_SHOW", false)
+
 
     fun clear() {
     }

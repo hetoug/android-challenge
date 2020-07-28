@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "991951324701",
+    "firebase_url": "https://android-seed.firebaseio.com",
+    "project_id": "android-seed",
+    "storage_bucket": "android-seed.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:991951324701:android:7664dff2f362c3a7",
+        "android_client_info": {
+          "package_name": "dk.adaptmobile.android_seed.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "991951324701-906huqoq082dpqd2jth1mlhq334aa15a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCPR4Wl4qxxYm_o8vH0EWKomT0-58vn3M4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "991951324701-906huqoq082dpqd2jth1mlhq334aa15a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
