@@ -65,7 +65,6 @@ abstract class BaseView<T : BaseViewModel<*, T2>, T2 : BaseViewModel.IOutput> : 
                 if (outputDisposable != null) return
 
                 outputDisposable = viewModel.output
-                        .toSerialized()
                         .compose(bindUntilEvent(ControllerEvent.DESTROY))
                         .doOnAndroidMain()
                         .subscribe(

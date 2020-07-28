@@ -85,7 +85,6 @@ android {
             buildConfigField "int", "HTTP_LOGLEVEL", "2"
             buildConfigField "String", "BASE_URL", "\"https://www.google.com\""
             buildConfigField "long", "REMOTE_CONFIG_CACHE_EXPIRATION_SECONDS", "0"
-            buildConfigField "boolean", "CRASHLYTICS_ENABLED", "true"
             debuggable true
         }
         stage {
@@ -95,7 +94,6 @@ android {
             buildConfigField "int", "HTTP_LOGLEVEL", "2"
             buildConfigField "String", "BASE_URL", "\"\""
             buildConfigField "long", "REMOTE_CONFIG_CACHE_EXPIRATION_SECONDS", "0"
-            buildConfigField "boolean", "CRASHLYTICS_ENABLED", "true"
             debuggable true
             signingConfig signingConfigs.stage
         }
@@ -105,7 +103,6 @@ android {
             buildConfigField "int", "HTTP_LOGLEVEL", "0"
             buildConfigField "String", "BASE_URL", "\"\""
             buildConfigField "long", "REMOTE_CONFIG_CACHE_EXPIRATION_SECONDS", "600"
-            buildConfigField "boolean", "CRASHLYTICS_ENABLED", "true"
             signingConfig signingConfigs.release
         }
     }

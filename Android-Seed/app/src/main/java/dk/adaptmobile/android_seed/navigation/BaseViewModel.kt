@@ -11,10 +11,11 @@ import io.reactivex.rxkotlin.addTo
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import io.reactivex.subjects.ReplaySubject
+import io.reactivex.subjects.Subject
 
 abstract class BaseViewModel<T : BaseViewModel.IInput, T2 : BaseViewModel.IOutput> {
     val disposeBag: CompositeDisposable = CompositeDisposable()
-    val output: ReplaySubject<T2> = ReplaySubject.create()
+    val output: Subject<T2>
     val input: BehaviorSubject<T> = BehaviorSubject.create()
 
     open class IOutput
@@ -24,6 +25,9 @@ abstract class BaseViewModel<T : BaseViewModel.IInput, T2 : BaseViewModel.IOutpu
     protected abstract fun handleInput(input: T)
 
     init {
+        val replaySubject = ReplaySubject.create<T2>()
+        output = replaySubject.toSerialized() // We want to use a SerializedSubject since that allows calling onNext from any thread. Reference: https://stackoverflow.com/questions/31841809/is-serializedsubject-necessary-for-thread-safety-in-rxjava
+
         input
                 .observeOn(Schedulers.computation())
                 .subscribe(
