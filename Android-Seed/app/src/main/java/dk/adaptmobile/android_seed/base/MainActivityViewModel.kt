@@ -10,10 +10,9 @@ import dk.adaptmobile.amkotlinutil.extensions.wait
 import dk.adaptmobile.android_seed.managers.PrefsManager
 import dk.adaptmobile.android_seed.navigation.NavManager
 import dk.adaptmobile.android_seed.screens.Routing
+import io.reactivex.rxjava3.kotlin.addTo
+import io.reactivex.rxjava3.subjects.PublishSubject
 
-import io.reactivex.rxkotlin.addTo
-import io.reactivex.rxkotlin.subscribeBy
-import io.reactivex.subjects.PublishSubject
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 

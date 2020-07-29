@@ -18,14 +18,15 @@ import dk.adaptmobile.amkotlinutil.extensions.disposeSafe
 import dk.adaptmobile.amkotlinutil.extensions.doOnAndroidMain
 import dk.adaptmobile.amkotlinutil.extensions.inflate
 import dk.adaptmobile.amkotlinutil.extensions.lastController
-import io.reactivex.Completable
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxjava3.core.Completable
+import io.reactivex.rxjava3.disposables.Disposable
+import io.reactivex.rxjava3.schedulers.Schedulers
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.*
+import org.koin.core.KoinComponent
 
 @SuppressLint("CheckResult")
-abstract class BaseView<T : BaseViewModel<*, T2>, T2 : BaseViewModel.IOutput> : RxRestoreViewOnCreateController(), LayoutContainer {
+abstract class BaseView<T : BaseViewModel<*, T2>, T2 : BaseViewModel.IOutput> : RxRestoreViewOnCreateController(), LayoutContainer, KoinComponent {
 
     private var outputDisposable: Disposable? = null
     open var savedViewState: Bundle? = null

@@ -14,9 +14,6 @@ import dk.adaptmobile.amkotlinutil.extensions.disposeSafe
 import dk.adaptmobile.amkotlinutil.extensions.doOnAndroidMain
 import dk.adaptmobile.android_seed.R
 import dk.adaptmobile.android_seed.managers.PrefsManager
-import io.reactivex.Single
-import io.reactivex.rxkotlin.Singles
-import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.android.synthetic.main.activity_splash.*
 import org.koin.core.KoinComponent
 import org.koin.core.inject
