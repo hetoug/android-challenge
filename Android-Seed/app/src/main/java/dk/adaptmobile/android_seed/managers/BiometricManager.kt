@@ -15,7 +15,7 @@ import androidx.core.os.BuildCompat
 import androidx.fragment.app.FragmentActivity
 import com.github.ajalt.timberkt.Timber.e
 import dk.adaptmobile.android_seed.R
-import io.reactivex.Single
+import io.reactivex.rxjava3.core.Single
 import java.util.concurrent.Executors
 
 /**

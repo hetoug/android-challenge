@@ -14,9 +14,9 @@ import dk.adaptmobile.amkotlinutil.extensions.lastController
 import dk.adaptmobile.amkotlinutil.extensions.pushView
 import dk.adaptmobile.android_seed.managers.PrefsManager
 import dk.adaptmobile.android_seed.screens.Routing
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.kotlin.addTo
+import io.reactivex.rxjava3.subjects.PublishSubject
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 

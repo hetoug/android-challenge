@@ -2,18 +2,16 @@ package dk.adaptmobile.android_seed.navigation
 
 import com.github.ajalt.timberkt.e
 import dk.adaptmobile.amkotlinutil.extensions.subscribeOnAndroidMain
+import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.kotlin.addTo
+import io.reactivex.rxjava3.schedulers.Schedulers
+import io.reactivex.rxjava3.subjects.BehaviorSubject
+import io.reactivex.rxjava3.subjects.ReplaySubject
+import io.reactivex.rxjava3.subjects.Subject
 
-import io.reactivex.Observable
-import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.rxkotlin.addTo
-import io.reactivex.schedulers.Schedulers
-import io.reactivex.subjects.BehaviorSubject
-import io.reactivex.subjects.ReplaySubject
-import io.reactivex.subjects.Subject
+import org.koin.core.KoinComponent
 
-abstract class BaseViewModel<T : BaseViewModel.IInput, T2 : BaseViewModel.IOutput> {
+abstract class BaseViewModel<T : BaseViewModel.IInput, T2 : BaseViewModel.IOutput> : KoinComponent {
     val disposeBag: CompositeDisposable = CompositeDisposable()
     val output: Subject<T2>
     val input: BehaviorSubject<T> = BehaviorSubject.create()
@@ -37,29 +35,5 @@ abstract class BaseViewModel<T : BaseViewModel.IInput, T2 : BaseViewModel.IOutpu
                 .addTo(disposeBag)
     }
 
-    protected fun <T> subscribeToInput(observable: Observable<T>, callback: (value: T) -> Unit) {
-        observable
-                .subscribeOnAndroidMain()
-                .subscribe(
-                        {
-                            callback(it)
-                        },
-                        {
-                            e(it) { "Error" }
-                        }
-                ).addTo(disposeBag)
-    }
 
-    protected fun <T> subscribeToInput(observable: Single<T>, callback: (value: T) -> Unit) {
-        observable
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        {
-                            callback(it)
-                        },
-                        {
-                            e(it) { "Error" }
-                        }
-                ).addTo(disposeBag)
-    }
 }

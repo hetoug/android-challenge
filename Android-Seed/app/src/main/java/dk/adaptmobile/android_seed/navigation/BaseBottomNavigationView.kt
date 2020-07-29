@@ -7,14 +7,13 @@ import com.bluelinelabs.conductor.changehandler.SimpleSwapChangeHandler
 import com.bluelinelabs.conductor.rxlifecycle2.ControllerEvent
 import com.github.ajalt.timberkt.e
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.jakewharton.rxbinding3.material.itemSelections
 import dk.adaptmobile.amkotlinutil.extensions.*
 import dk.adaptmobile.android_seed.base.FirstTab
 import dk.adaptmobile.android_seed.base.FourthTab
 import dk.adaptmobile.android_seed.base.SecondTab
 import dk.adaptmobile.android_seed.base.ThirdTab
-import io.reactivex.rxkotlin.addTo
-import io.reactivex.rxkotlin.subscribeBy
+import io.reactivex.rxjava3.kotlin.addTo
+import io.reactivex.rxjava3.kotlin.subscribeBy
 
 @SuppressLint("CheckResult")
 abstract class BaseBottomNavigationView<T : BaseViewModel<*, T2>, T2 : BaseViewModel.IOutput> : BaseView<T, T2>() {

@@ -2,7 +2,7 @@ package dk.adaptmobile.android_seed.screens.fourthview
 
 import dk.adaptmobile.android_seed.navigation.BaseViewModel
 import dk.adaptmobile.android_seed.screens.fourthview.FourthViewModel.*
-import io.reactivex.Observable
+import io.reactivex.rxjava3.core.Observable
 
 class FourthViewModel : BaseViewModel<Input, Output>() {
 
