@@ -30,7 +30,7 @@ abstract class BaseUseCase : KoinComponent {
         }
 
         if (result is UseCaseResult.Failure) {
-            e { "Error - ${result.message.message}.\nStatus: ${result.message.statusCode}.\nThrowable: ${result.message.throwable}" }
+            e { "Error: ${result.message.message}.\nStatus: ${result.message.statusCode}.\nThrowable: ${result.message.throwable}" }
         }
 
         return result
