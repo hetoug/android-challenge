@@ -49,12 +49,3 @@ class FirstViewModel : BaseViewModel<Input, Output>() {
                 }
     }
 }
-
-
-
-
-
-
-
-
-

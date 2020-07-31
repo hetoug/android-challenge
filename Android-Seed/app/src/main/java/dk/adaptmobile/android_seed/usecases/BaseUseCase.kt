@@ -35,6 +35,4 @@ abstract class BaseUseCase : KoinComponent {
 
         return result
     }
-
-
 }
