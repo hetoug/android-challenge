@@ -11,6 +11,7 @@ import org.koin.core.KoinComponent
 
 
 class FirstView : BaseView<FirstViewModel, Output>() {
+
     override fun setViewModel() = FirstViewModel()
 
     override fun inflateView() = R.layout.view_first

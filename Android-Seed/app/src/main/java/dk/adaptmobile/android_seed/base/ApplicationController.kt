@@ -15,8 +15,9 @@ import dk.adaptmobile.android_seed.managers.PrefsManager
 import dk.adaptmobile.android_seed.managers.TrackingManager
 import dk.adaptmobile.android_seed.navigation.NavManager
 import dk.adaptmobile.android_seed.network.ConnectionManager
-import dk.adaptmobile.android_seed.screens.firstview.FetchJsonUseCase
+import dk.adaptmobile.android_seed.usecases.FetchJsonUseCase
 import dk.adaptmobile.android_seed.util.CrashlyticsTree
+import dk.adaptmobile.android_seed.util.ErrorConverter
 import io.reactivex.rxjava3.plugins.RxJavaPlugins
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
@@ -79,6 +80,7 @@ class ApplicationController : MultiDexApplication() {
             single { NotificationManagerCompat.from(get()) }
             single { FirebaseCrashlytics.getInstance() }
             single { TrackingManager(this@ApplicationController, get()) }
+            single { ErrorConverter(get()) }
             factory { FirebaseAnalytics.getInstance(get()) }
             factory { FetchJsonUseCase(get()) }
         }
