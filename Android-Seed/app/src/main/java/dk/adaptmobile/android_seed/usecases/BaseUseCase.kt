@@ -1,9 +1,7 @@
 package dk.adaptmobile.android_seed.usecases
 
 import com.github.ajalt.timberkt.e
-import dk.adaptmobile.android_seed.R
 import dk.adaptmobile.android_seed.util.ErrorConverter
-import io.reactivex.rxjava3.core.Single
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import retrofit2.adapter.rxjava3.Result
@@ -18,16 +16,24 @@ abstract class BaseUseCase : KoinComponent {
 
     internal fun <T, R> Result<T>.toUseCaseResult(function: (it: T) -> R): UseCaseResult<R> {
         val response = response()
-        return when (isError || response == null) {
+        val error = error()
+        val result: UseCaseResult<R> = when (isError || response == null) {
             false -> {
                 val body = response.body()
                 when (response.isSuccessful && body != null) {
                     true -> UseCaseResult.Success(function(body))
-                    false -> UseCaseResult.Failure(errorConverter.toErrorResponse(response) ?: ErrorConverter.ErrorMessage("Generic error"))
+                    false -> UseCaseResult.Failure(errorConverter.toErrorResponse(response, error)
+                            ?: ErrorConverter.ErrorMessage("Generic error", error))
                 }
             }
-            true -> return UseCaseResult.Failure(ErrorConverter.ErrorMessage("Generic error"))
+            true -> return UseCaseResult.Failure(ErrorConverter.ErrorMessage("Generic error", error))
         }
+
+        if (result is UseCaseResult.Failure) {
+            e { "Error - ${result.message.message}.\nStatus: ${result.message.statusCode}.\nThrowable: ${result.message.throwable}" }
+        }
+
+        return result
     }
 
 

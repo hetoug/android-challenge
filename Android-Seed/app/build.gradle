@@ -82,7 +82,7 @@ android {
             minifyEnabled false
             applicationIdSuffix ".debug"
             resValue "string", "app_name", "APP_NAME_CHANGE Dev"
-            buildConfigField "int", "HTTP_LOGLEVEL", "2"
+            buildConfigField "int", "HTTP_LOGLEVEL", "1"
             buildConfigField "String", "BASE_URL", "\"https://www.google.com\""
             buildConfigField "long", "REMOTE_CONFIG_CACHE_EXPIRATION_SECONDS", "0"
             debuggable true
@@ -91,7 +91,7 @@ android {
             minifyEnabled false
             applicationIdSuffix ".stage"
             resValue "string", "app_name", "APP_NAME_CHANGE Stage"
-            buildConfigField "int", "HTTP_LOGLEVEL", "2"
+            buildConfigField "int", "HTTP_LOGLEVEL", "1"
             buildConfigField "String", "BASE_URL", "\"\""
             buildConfigField "long", "REMOTE_CONFIG_CACHE_EXPIRATION_SECONDS", "0"
             debuggable true

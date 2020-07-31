@@ -1,7 +1,6 @@
 package dk.adaptmobile.android_seed.usecases
 
 import dk.adaptmobile.android_seed.model.TestRequest
-import dk.adaptmobile.android_seed.model.TestResponse
 import dk.adaptmobile.android_seed.network.ConnectionManager
 import io.reactivex.rxjava3.core.Single
 
