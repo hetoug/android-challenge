@@ -1,15 +1,14 @@
 package dk.adaptmobile.android_seed.usecases
 
-import dk.adaptmobile.android_seed.model.TestRequest
-import dk.adaptmobile.android_seed.network.ConnectionManager
+import dk.adaptmobile.android_seed.network.RestService
 import io.reactivex.rxjava3.core.Single
 
 class FetchJsonUseCase(
-        private val connectionManager: ConnectionManager
+    private val restService: RestService
 ) : BaseUseCase() {
     operator fun invoke(): Single<UseCaseResult<String>> {
-        return connectionManager.restService
-                .postRequest(TestRequest("Test"))
+        return restService
+                .postRequest()
                 .map { it.toUseCaseResult { it.json.test } }
     }
 }

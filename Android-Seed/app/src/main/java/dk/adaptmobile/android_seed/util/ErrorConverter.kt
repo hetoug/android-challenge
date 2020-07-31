@@ -5,10 +5,10 @@ import retrofit2.Response
 import retrofit2.Retrofit
 
 class ErrorConverter(val retrofit: Retrofit) {
-    abstract class ErrorWrapper(var statusCode: Int = 0, var throwable: Throwable? = null)
-    class ErrorMessage(val message: String, throwable: Throwable? = null) : ErrorWrapper(throwable = throwable)
+    abstract class ErrorWrapper(var statusCode: Int = 0)
+    data class ErrorMessage(val message: String?) : ErrorWrapper()
 
-    inline fun <T, reified T2 : ErrorWrapper> toErrorResponse(response: Response<T>?, throwable: Throwable?): T2? {
+    inline fun <T, reified T2 : ErrorWrapper> toErrorResponse(response: Response<T>?): T2? {
         var error: T2? = null
         if (response == null) {
             response?.printStackTrace()
@@ -18,7 +18,6 @@ class ErrorConverter(val retrofit: Retrofit) {
             try {
                 error = converter.convert(body)?.apply {
                     this.statusCode = response.code()
-                    this.throwable = throwable
                 }
             } catch (exception: Exception) {
                 e { "Convert to ErrorResponse error: $exception" }

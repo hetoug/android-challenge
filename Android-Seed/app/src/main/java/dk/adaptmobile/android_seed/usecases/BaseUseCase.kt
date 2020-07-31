@@ -22,15 +22,14 @@ abstract class BaseUseCase : KoinComponent {
                 val body = response.body()
                 when (response.isSuccessful && body != null) {
                     true -> UseCaseResult.Success(function(body))
-                    false -> UseCaseResult.Failure(errorConverter.toErrorResponse(response, error)
-                            ?: ErrorConverter.ErrorMessage("Generic error", error))
+                    false -> UseCaseResult.Failure(errorConverter.toErrorResponse(response) ?: ErrorConverter.ErrorMessage(error?.message))
                 }
             }
-            true -> return UseCaseResult.Failure(ErrorConverter.ErrorMessage("Generic error", error))
+            true -> UseCaseResult.Failure(ErrorConverter.ErrorMessage(error?.message))
         }
 
         if (result is UseCaseResult.Failure) {
-            e { "Error: ${result.message.message}.\nStatus: ${result.message.statusCode}.\nThrowable: ${result.message.throwable}" }
+            e { "Error: ${result.message.message}. StatusCode: ${result.message.statusCode}" }
         }
 
         return result
