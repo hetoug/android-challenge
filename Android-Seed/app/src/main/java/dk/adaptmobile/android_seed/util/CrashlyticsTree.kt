@@ -4,7 +4,7 @@ import android.util.Log.ERROR
 import android.util.Log.VERBOSE
 import android.util.Log.WARN
 import com.google.firebase.crashlytics.FirebaseCrashlytics
-import dk.adaptmobile.android_seed.extensions.getEnhancedStackTrace
+import dk.adaptmobile.amkotlinutil.util.getEnhancedStackTrace
 import org.koin.core.KoinComponent
 import org.koin.core.inject
 import timber.log.Timber
