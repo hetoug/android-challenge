@@ -1,18 +1,9 @@
 package dk.adaptmobile.android_seed.extensions
 
-import androidx.annotation.NonNull
-import androidx.annotation.Nullable
 import dk.adaptmobile.android_seed.managers.CacheManager
-import dk.adaptmobile.android_seed.util.RxJava3Debug
-import hu.akarnokd.rxjava3.debug.RxJavaAssemblyException
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.core.Single
-import java.util.*
-import java.util.regex.Matcher
-import java.util.regex.Pattern
-import kotlin.collections.ArrayList
-
 
 inline fun <reified T> Single<T>.withCache(expirationSeconds: Int, forceExpirationSeconds: Int = 3600): Flowable<T> {
     val cachedValue = CacheManager.getCachedValue<T>()
@@ -43,26 +34,3 @@ inline fun <reified T> Observable<T>.withCache(expirationSeconds: Int, forceExpi
         else -> this
     }
 }
-
-/**
- * Obtain a copy of the original Throwable with an extended StackTrace
- *
- * @param original Original Throwable
- * @return new Throwable with enhanced StackTrace if information was found. *Original Throwable* otherwise
- */
-@NonNull
-fun Throwable.getEnhancedStackTrace(): Throwable {
-    val assembledException = RxJavaAssemblyException.find(this)
-    if (assembledException != null) {
-        val clearStack = RxJava3Debug.parseStackTrace(assembledException, RxJava3Debug.basePackages)
-        val enhancedMessage = this.toString()
-        val clearException = Throwable(enhancedMessage)
-        clearException.stackTrace = clearStack
-        return RxJava3Debug.setRootCause(this, clearException)
-    }
-    return this
-}
-
-
-
-

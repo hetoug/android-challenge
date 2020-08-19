@@ -9,20 +9,29 @@ import com.github.ajalt.timberkt.e
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.icapps.niddler.core.AndroidNiddler
-import com.icapps.niddler.core.Niddler
+import com.icapps.niddler.interceptor.okhttp.NiddlerOkHttpInterceptor
+import com.icapps.niddler.retrofit.NiddlerRetrofitCallInjector
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dk.adaptmobile.android_seed.BuildConfig
 import dk.adaptmobile.android_seed.managers.PrefsManager
 import dk.adaptmobile.android_seed.managers.TrackingManager
 import dk.adaptmobile.android_seed.navigation.NavManager
-import dk.adaptmobile.android_seed.network.ConnectionManager
-import dk.adaptmobile.android_seed.screens.firstview.FetchJsonUseCase
+import dk.adaptmobile.android_seed.network.JavaDateAdapter
+import dk.adaptmobile.android_seed.network.RestService
+import dk.adaptmobile.android_seed.usecases.FetchJsonUseCase
 import dk.adaptmobile.android_seed.util.CrashlyticsTree
+import dk.adaptmobile.android_seed.util.ErrorConverter
 import io.reactivex.rxjava3.plugins.RxJavaPlugins
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
+import retrofit2.Retrofit
+import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
+import retrofit2.converter.moshi.MoshiConverterFactory
 import timber.log.Timber
-
 
 @Suppress("ConstantConditionIf")
 @SuppressLint("CheckResult")
@@ -67,7 +76,7 @@ class ApplicationController : MultiDexApplication() {
             Timber.plant(LinkingDebugTree())
         }
 
-        //Error handler that will be called when onError is not set.
+        // Error handler that will be called when onError is not set.
         RxJavaPlugins.setErrorHandler { e(it) }
     }
 
@@ -75,10 +84,44 @@ class ApplicationController : MultiDexApplication() {
 
         val module = module {
             single { PrefsManager(get()) }
-            single { ConnectionManager(niddler) }
             single { NotificationManagerCompat.from(get()) }
             single { FirebaseCrashlytics.getInstance() }
             single { TrackingManager(this@ApplicationController, get()) }
+            single { ErrorConverter(get()) }
+            single { // Moshi
+                Moshi.Builder()
+                        .add(JavaDateAdapter())
+                        .add(KotlinJsonAdapterFactory())
+                        .build()
+            }
+            single { // OkHttpClient
+                val interceptor = HttpLoggingInterceptor()
+
+                when (BuildConfig.HTTP_LOGLEVEL) {
+                    0 -> interceptor.level = HttpLoggingInterceptor.Level.NONE
+                    1 -> interceptor.level = HttpLoggingInterceptor.Level.BASIC
+                    2 -> interceptor.level = HttpLoggingInterceptor.Level.BODY
+                    else -> interceptor.level = HttpLoggingInterceptor.Level.NONE
+                }
+
+                OkHttpClient.Builder()
+                        .addInterceptor(interceptor)
+                        .addInterceptor(NiddlerOkHttpInterceptor(niddler, "Default"))
+                        .build()
+            }
+            single { // Retrofit
+                Retrofit.Builder()
+                        .baseUrl(BuildConfig.BASE_URL)
+                        .client(get())
+                        .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
+                        .addConverterFactory(MoshiConverterFactory.create(get())).apply {
+                            NiddlerRetrofitCallInjector.inject(this, niddler, get<OkHttpClient>())
+                        }.build()
+            }
+            single { // RestService
+                val retrofit = get<Retrofit>()
+                retrofit.create(RestService::class.java)
+            }
             factory { FirebaseAnalytics.getInstance(get()) }
             factory { FetchJsonUseCase(get()) }
         }
