@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/tab_first"
+        android:icon="@drawable/tab_first_selector"
+        android:state_checked="true"
+        android:color="@color/cadmium_red"
+        android:title="@string/tab_first" />
+    <item
+        android:id="@+id/tab_second"
+        android:icon="@drawable/tab_second_selector"
+        android:color="@color/cadmium_red"
+        android:title="@string/tab_second" />
+    <item
+        android:id="@+id/tab_third"
+        android:icon="@drawable/tab_third_selector"
+        android:color="@color/cadmium_red"
+        android:title="@string/tab_third" />
+    <item
+        android:id="@+id/tab_fourth"
+        android:icon="@drawable/tab_fourth_selector"
+        android:color="@color/cadmium_red"
+        android:title="@string/tab_fourth" />
+</menu>

@@ -4,7 +4,7 @@ A good starting point for future Android apps!
 
 ## Requirements
 
-Have python and homebrew installed on your mac.
+Have bitrise, hub, python and homebrew installed on your mac.
 
 For installing homebrew (remember to have xcode installed):
 
@@ -18,7 +18,29 @@ For installing the latest python 3:
 brew install python3
 ```
 
-## Setup
+Needed for creating a Bitrise app project
+
+```bash
+brew install bitrise
+```
+
+Need for creating a new private repo for adaptdk organization
+```bash
+brew install hub
+```
+
+> Note: At a later time we will migrate over to [gh cli](https://github.com/cli/cli) instead of [hub](https://github.com/github/hub).
+
+## Clone and Setup
+
+If you dont wan't to manually copy the git url and then type two commands, then just run this in your terminal.
+It will clone the seed project and change directory into the project and run the `setup? python script.
+
+```bash
+git clone git@github.com:adaptdk/adaptmobile-android-seed.git && cd adaptmobile-android-seed && python3 setup.py
+```
+
+## Setup (If you already have the project cloned)
 
 Run the python script `setup.py` and follow the steps for setting up the project.
 

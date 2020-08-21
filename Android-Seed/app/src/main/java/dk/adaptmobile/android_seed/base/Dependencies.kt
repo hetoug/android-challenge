@@ -1,8 +1,12 @@
 package dk.adaptmobile.android_seed.base
 
-import io.reactivex.subjects.PublishSubject
+import dk.adaptmobile.android_seed.managers.TrackingEvent
+import dk.adaptmobile.android_seed.managers.TrackingScreen
+import io.reactivex.rxjava3.subjects.PublishSubject
 
 object Dependencies {
     val noNetworkSubject = PublishSubject.create<Boolean>()
     val loadingSubject = PublishSubject.create<Boolean>()
+    var screenTracking: PublishSubject<TrackingScreen> = PublishSubject.create()
+    var eventTracking: PublishSubject<TrackingEvent> = PublishSubject.create()
 }

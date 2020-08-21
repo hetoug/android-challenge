@@ -5,4 +5,14 @@
     <color name="colorAccent">#00725E</color>
     <color name="white">#FFFFFF</color>
     <color name="black">#000000</color>
+
+
+    <color name="gainsboro_50">#80dfdfdf</color>
+    <color name="ghost_white">#fff9f9f9</color>
+    <color name="cadmium_red">#ffe50026</color>
+    <color name="outer_space">#ff4a4a4a</color>
+
+
+
+
 </resources>

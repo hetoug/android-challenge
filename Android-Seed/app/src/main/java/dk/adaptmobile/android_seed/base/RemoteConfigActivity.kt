@@ -5,9 +5,9 @@ import com.github.ajalt.timberkt.Timber.d
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings
 import dk.adaptmobile.amkotlinutil.extensions.versionNumberToInt
-import dk.adaptmobile.amkotlinutil.navigation.BaseActivity
 import dk.adaptmobile.android_seed.BuildConfig
 import dk.adaptmobile.android_seed.R
+import dk.adaptmobile.android_seed.navigation.BaseActivity
 
 open class RemoteConfigActivity : BaseActivity() {
 
