@@ -4,7 +4,7 @@ A good starting point for future Android apps!
 
 ## Requirements
 
-Have bitrise, hub, python and homebrew installed on your mac.
+Have bitrise, gh, python and homebrew installed on your mac.
 
 For installing homebrew (remember to have xcode installed):
 
@@ -24,12 +24,11 @@ Needed for creating a Bitrise app project
 brew install bitrise
 ```
 
-Need for creating a new private repo for adaptdk organization
-```bash
-brew install hub
-```
+Needed for creating a new private repo for adaptdk organization
 
-> Note: At a later time we will migrate over to [gh cli](https://github.com/cli/cli) instead of [hub](https://github.com/github/hub).
+```bash
+brew install gh
+```
 
 ## Clone and Setup
 
@@ -57,6 +56,6 @@ brew list ktlint | brew upgrade ktlint || brew install ktlint && curl -s -L "htt
 ```
 
 This will add a pre-commit executable and a .editorconfig for the teams personalized rules. 
-If .editorconfig needs to have rules changed the please change it in [am-ktlint-editorconfig](https://github.com/adaptdk/am-ktlint-editorconfig/blob/master/.editorconfig) to have the rules implemented in existing projects that has the pre-commit.
+If `.editorconfig` needs to have rules changed the please change it in [am-ktlint-editorconfig](https://github.com/adaptdk/am-ktlint-editorconfig/blob/master/.editorconfig) to have the rules implemented in existing projects that has the pre-commit.
 
 This will have the code style streamlined in our kotlin projects.
