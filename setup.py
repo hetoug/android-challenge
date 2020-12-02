@@ -3,6 +3,7 @@ import os
 import shlex
 import shutil
 import subprocess
+import time
 from pathlib import Path
 
 OLD_SEED_NAME = "Android-Seed"
@@ -116,13 +117,13 @@ def rename_keystore_fields():
 
 
 def create_private_repo():
-    subprocess.run(["hub", "create", "--private", "{org}/{repo_name}".format(org=GITHUB_ORG, repo_name=project_name)])
+    subprocess.run(["gh", "repo", "create", "--private", "{org}/{repo_name}".format(org=GITHUB_ORG, repo_name=repo_name)])
 
 
 def change_remote_url():
     subprocess.run(
         ["git", "remote", "set-url", "origin",
-         "git@github.com:{org}/{repo_name}.git".format(org=GITHUB_ORG, repo_name=project_name)])
+         "git@github.com:{org}/{repo_name}.git".format(org=GITHUB_ORG, repo_name=repo_name)])
     print(f'Changed remote origin url to: ')
     subprocess.run(["git", "remote", "--verbose"])
 
@@ -172,9 +173,19 @@ def setup_bitrise():
     subprocess.run(args)
 
 
+def gh_auth():
+    subprocess.run(["gh", "auth", "login"])
+
+
 if __name__ == '__main__':
     project_name = input("Project name like --> Boligsigen: ").replace(" ", "-")
-    project = project_name.lower() + "-android"
+
+    repo_name = input("Enter GitHub repo name (defaults to {project name}-android): ")
+
+    if not repo_name:
+        repo_name = project_name.lower() + "-android"
+
+    project = repo_name
     rename_project()
 
     rename_bitrise_project_location_placeholder()
@@ -184,7 +195,7 @@ if __name__ == '__main__':
     app_name = input("What's the app name: ")
     rename_app_name()
 
-    package_name = input("Enter new package name like -> dk.adaptmobile.android_seed: ")
+    package_name = input("Enter new package name like --> dk.adaptmobile.android_seed: ")
     rename_package_dirs()
 
     alias = input("Alias for the keystore: ")
@@ -192,6 +203,13 @@ if __name__ == '__main__':
     rename_keystore_fields()
     generate_keystore()
 
+    # Wait for 2 seconds so keystore has been generated
+    time.sleep(2)
+
+    # Login or refresh auth token for GitHub using gh cli
+    gh_auth()
+
+    # Creates a private repo with gh cli
     create_private_repo()
 
     change_remote_url()
