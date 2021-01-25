@@ -141,9 +141,9 @@ dependencies {
     implementation 'com.github.ajalt:timberkt:1.5.1'
 
     //CONDUCTOR
-    implementation 'com.github.ChristianSteffensen.Conductor:conductor:599302efbe'
-    implementation 'com.github.ChristianSteffensen.Conductor:conductor-support:599302efbe'
-    implementation 'com.github.ChristianSteffensen.Conductor:conductor-rxlifecycle2:599302efbe'
+    implementation 'com.github.ChristianSteffensen.conductor:conductor:599302efbe'
+    implementation 'com.github.ChristianSteffensen.conductor:conductor-support:599302efbe'
+    implementation 'com.github.ChristianSteffensen.conductor:conductor-rxlifecycle2:599302efbe'
 
     // --- NETWORK --- //
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'

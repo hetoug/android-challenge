@@ -13,12 +13,12 @@
     </style>
 
     <style name="BottomNavigationViewTextStyleActive">
-        <item name="android:fontFamily">@font/juli_reg</item>
+        <!--<item name="android:fontFamily">@font/juli_reg</item>-->
         <item name="android:textSize" tools:ignore="SpUsage">10dp</item>
     </style>
 
     <style name="BottomNavigationViewTextStyleInactive">
-        <item name="android:fontFamily">@font/juli_reg</item>
+        <!--<item name="android:fontFamily">@font/juli_reg</item>-->
         <item name="android:textSize" tools:ignore="SpUsage">10dp</item>
     </style>
 
