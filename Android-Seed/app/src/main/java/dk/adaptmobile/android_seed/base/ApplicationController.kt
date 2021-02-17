@@ -17,6 +17,7 @@ import dk.adaptmobile.android_seed.BuildConfig
 import dk.adaptmobile.android_seed.managers.PrefsManager
 import dk.adaptmobile.android_seed.managers.TrackingManager
 import dk.adaptmobile.android_seed.navigation.NavManager
+import dk.adaptmobile.android_seed.network.FetchNewsUseCase
 import dk.adaptmobile.android_seed.network.JavaDateAdapter
 import dk.adaptmobile.android_seed.network.RestService
 import dk.adaptmobile.android_seed.usecases.FetchJsonUseCase
@@ -124,6 +125,7 @@ class ApplicationController : MultiDexApplication() {
             }
             factory { FirebaseAnalytics.getInstance(get()) }
             factory { FetchJsonUseCase(get()) }
+            factory { FetchNewsUseCase(get()) }
         }
 
         startKoin {

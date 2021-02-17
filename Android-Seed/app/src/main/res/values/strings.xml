@@ -7,4 +7,7 @@
     <string name="tab_second">Second</string>
     <string name="tab_third">Third</string>
     <string name="tab_fourth">Fourth</string>
+    <string name="second_getNews_text">Get news</string>
+    <string name="sorry_no_news">Sorry - No news</string>
+    <string name="back">Back</string>
 </resources>

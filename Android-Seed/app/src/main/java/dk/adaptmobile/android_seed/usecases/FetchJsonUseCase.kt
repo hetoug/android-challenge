@@ -9,6 +9,6 @@ class FetchJsonUseCase(
     operator fun invoke(): Single<UseCaseResult<String>> {
         return restService
                 .postRequest()
-                .map { it.toUseCaseResult { it.slideshow.title } }
+                .map { it.toUseCaseResult { it.articles[3].title } }
     }
 }
