@@ -8,13 +8,7 @@ import dk.adaptmobile.android_seed.navigation.NavManager
 import dk.adaptmobile.android_seed.screens.browser.BrowserViewModel.*
 import io.reactivex.rxjava3.core.Observable
 
-class BrowserViewModel(url: String) : BaseViewModel<Input, Output>() {
-    private lateinit var url: String
-
-    constructor(url: String) : this() {
-        this.url = url
-    }
-
+class BrowserViewModel(val url: String) : BaseViewModel<Input, Output>() {
     sealed class Output : BaseViewModel.IOutput() {
         data class LoadUrl(val url: String) : Output()
     }

@@ -22,7 +22,8 @@ class SecondView : BaseView<SecondViewModel, Output>() {
     override fun onViewBound(view: View, activity: Activity) {
         viewModel.input.onNext(
                 Input.Events(
-                        getNewsClicked = second_getNews.clicks()
+                        getNewsClicked = second_getNews.clicks(),
+                        showMediqClicked = showMediq.clicks()
                 )
         )
         setupAdapter()

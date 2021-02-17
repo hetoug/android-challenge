@@ -3,7 +3,9 @@ package dk.adaptmobile.android_seed.screens.secondview
 import dk.adaptmobile.amkotlinutil.extensions.subscribeToInput
 import dk.adaptmobile.android_seed.model.NewsApiArticle
 import dk.adaptmobile.android_seed.navigation.BaseViewModel
+import dk.adaptmobile.android_seed.navigation.NavManager
 import dk.adaptmobile.android_seed.network.FetchNewsUseCase
+import dk.adaptmobile.android_seed.screens.Routing
 import dk.adaptmobile.android_seed.screens.secondview.SecondViewModel.*
 import dk.adaptmobile.android_seed.usecases.BaseUseCase
 import dk.adaptmobile.android_seed.usecases.BaseUseCase.UseCaseResult
@@ -20,7 +22,8 @@ class SecondViewModel : BaseViewModel<Input, Output>() {
 
     sealed class Input : BaseViewModel.IInput() {
         data class Events(
-                val getNewsClicked: Observable<Unit>
+                val getNewsClicked: Observable<Unit>,
+                val showMediqClicked: Observable<Unit>
         ) : Input()
     }
 
@@ -36,8 +39,10 @@ class SecondViewModel : BaseViewModel<Input, Output>() {
     }
 
     private fun handleEvents(input: Input.Events) {
+        input.showMediqClicked.subscribeToInput(disposeBag) {
+            NavManager.openModally(Routing.Browser("https://mediqdanmark.dk"))
+        }
         input.getNewsClicked.flatMapSingle { fetchNewsUseCase() }.subscribeToInput(disposeBag) {
-
             when (it) {
                 is UseCaseResult.Success -> {
                     output.onNext(Output.ShowNewsFeed(it.body))

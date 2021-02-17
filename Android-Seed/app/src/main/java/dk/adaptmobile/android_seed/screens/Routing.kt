@@ -15,6 +15,6 @@ sealed class Routing(
 ) : BaseRouting(controller, animationType, asRoot, retain) {
 
     class BottomNavigation : Routing(BottomNavigationView(), animationType = AnimationType.None)
-    class Browser(url : String) : Routing(BrowserView(url), AnimationType.Slide)
+    class Browser(url : String) : Routing(BrowserView(url))
 
 }
