@@ -17,7 +17,7 @@ class NewsItem(private val article: NewsApiArticle) : Item() {
         viewHolder.itemView.newsListItemUrl.text = article.url
         viewHolder.itemView.setOnClickListener {
             if (it.newsListItemUrl.text != null) {
-                NavManager.openModally(Routing.Browser("https://mediqdanmark.dk"))
+                NavManager.open(Routing.Browser(it.newsListItemUrl.text.toString()))
             }
         }
     }

@@ -49,7 +49,7 @@ abstract class BaseBottomNavigationView<T : BaseViewModel<*, T2>, T2 : BaseViewM
         }
 
         if (tabRouter.isEmpty()) { // Fresh app state
-            NavManager.openTab(FirstTab)
+            NavManager.openTab(SecondTab)
         } else { // Restored app state
             bottomNavigation.onRestoreCallback = {
                 when (bottomNavigation.selectedItemId) {
